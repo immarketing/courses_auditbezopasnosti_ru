@@ -1,0 +1,21 @@
+{
+  "name": "courses_auditbezopasnosti_ru",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "AVGorbunov <immarketing@yandex.ru>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/immarketing/courses_auditbezopasnosti_ru",
+  "moduleType": [
+    "globals"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

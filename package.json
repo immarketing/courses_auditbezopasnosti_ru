@@ -1,0 +1,19 @@
+{
+  "name": "courses_auditbezopasnosti_ru",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/immarketing/courses_auditbezopasnosti_ru.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/immarketing/courses_auditbezopasnosti_ru/issues"
+  },
+  "homepage": "https://github.com/immarketing/courses_auditbezopasnosti_ru#readme"
+}
