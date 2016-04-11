@@ -6,6 +6,7 @@
  * Time: 23:12
  */
 require 'vendor/autoload.php';
+
 \PhpOffice\PhpWord\Autoloader::register();
 
 $phpWord = new  \PhpOffice\PhpWord\PhpWord();
