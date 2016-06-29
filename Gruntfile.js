@@ -34,7 +34,7 @@ module.exports = function (grunt) { /*require('jit-grunt')(grunt);*/
                     optimization: 2
                 },
                 files: {
-                    "css/school.css": "less.src/school.less"
+                    "css/courses.css": "less.src/courses.less"
                 }
             }
         },
