@@ -17,5 +17,16 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "resolutions": {
+    "jquery": "1.9.1 - 2"
+  },
+  "dependencies": {
+    "magnific-popup": "^1.1.0",
+    "jquery-ui": "^1.11.4",
+    "animate.css": "^3.5.2",
+    "font-awesome": "^4.6.3",
+    "bootstrap": "^3.3.6",
+    "jquery": "^2.0.0"
+  }
 }
