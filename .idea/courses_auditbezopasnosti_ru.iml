@@ -113,5 +113,6 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="courses_auditbezopasnosti_ru node_modules" level="project" />
   </component>
 </module>
