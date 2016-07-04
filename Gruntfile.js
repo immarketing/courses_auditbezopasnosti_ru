@@ -142,6 +142,18 @@ module.exports = function (grunt) { /*require('jit-grunt')(grunt);*/
                 }, {
                     expand: true,
                     flatten: true,
+                    src: '<%= globalConfig.bower_path %>/bootstrap-treeview/dist/bootstrap-treeview.min.js',
+                    dest: '<%= globalConfig.scripts %>/',
+                    filter: 'isFile'
+                }, {
+                    expand: true,
+                    flatten: true,
+                    src: '<%= globalConfig.bower_path %>/bootstrap-treeview/dist/bootstrap-treeview.min.css',
+                    dest: '<%= globalConfig.styles %>/',
+                    filter: 'isFile'
+                }, {
+                    expand: true,
+                    flatten: true,
                     src: '<%= globalConfig.bower_path %>/jQuery-viewport-checker/dist/*.js',
                     dest: '<%= globalConfig.scripts %>/',
                     filter: 'isFile'
