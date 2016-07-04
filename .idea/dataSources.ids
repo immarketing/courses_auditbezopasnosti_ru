@@ -15,17 +15,22 @@
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="4" parent="2" name="ShortName">
-        <data-type>text</data-type>
+        <data-type>varchar(100)</data-type>
       </column>
       <column id="5" parent="2" name="Name">
         <mandatory>1</mandatory>
-        <data-type>text</data-type>
+        <data-type>varchar(200)</data-type>
       </column>
       <column id="6" parent="2" name="googleDocID">
         <mandatory>1</mandatory>
-        <data-type>tinytext</data-type>
+        <data-type>varchar(50)</data-type>
       </column>
-      <key id="7" parent="2" name="PRIMARY">
+      <column id="7" parent="2" name="TOCJSON">
+        <mandatory>1</mandatory>
+        <data-type>varchar(20000)</data-type>
+        <default-expression>&apos;&apos;</default-expression>
+      </column>
+      <key id="8" parent="2" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
