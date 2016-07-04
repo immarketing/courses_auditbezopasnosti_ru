@@ -26,13 +26,33 @@ function setTOCTree() {
 
     $.getJSON('./php.src/gettoc.php'+ (_ijt ? '?_ijt='+_ijt : ''), function (data) {
         var tree = [];
+        var indents = [];
         console.log('function(data)');
         console.log(data);
         $.each(data, function (key, val) {
             //items.push('<li id="' + key + '">' + val + '</li>');
 
-            tree.push({'text': val.text});
+            //tree.push({'text': val.text});
+            indents[val.indentStart] = 1;
         });
+
+        var indentsKeys = indents.keys();
+        indentsKeys = indentsKeys.sort(function (a,b) {return a-b;});
+
+        var lvl = 1;
+        $.each (indentsKeys, function (key, val) {
+            //items.push('<li id="' + key + '">' + val + '</li>');
+            //tree.push({'text': val.text});
+            indents[key] = lvl++;
+        });
+
+        $.each(data, function (key, val) {
+            //items.push('<li id="' + key + '">' + val + '</li>');
+
+            //tree.push({'text': val.text});
+            //indents[val.indentStart] = 1;
+        });
+
         $('#agTOCTree').treeview({
             data: tree
         });
