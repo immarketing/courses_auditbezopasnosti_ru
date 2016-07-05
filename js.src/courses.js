@@ -3,10 +3,10 @@
  */
 
 var parseQueryString = function (strQuery) {
-    var strSearch   = strQuery.substr(1),
-        strPattern  = /([^=]+)=([^&]+)&?/ig,
-        arrMatch    = strPattern.exec(strSearch),
-        objRes      = {};
+    var strSearch = strQuery.substr(1),
+        strPattern = /([^=]+)=([^&]+)&?/ig,
+        arrMatch = strPattern.exec(strSearch),
+        objRes = {};
     while (arrMatch != null) {
         objRes[arrMatch[1]] = arrMatch[2];
         arrMatch = strPattern.exec(strSearch);
@@ -14,129 +14,148 @@ var parseQueryString = function (strQuery) {
     return objRes;
 };
 
+function transformDataToTOCTree(data) {
+    var result = [];
+    var indents = []; // уровни отступов
+
+    // определяем, какие уровни доступов вообще есть.
+    $.each(data, function (key, val) {
+        //items.push('<li id="' + key + '">' + val + '</li>');
+        //tree.push({'text': val.text});
+        indents[0+val.indentStart] = 1;
+    });
+
+    // сортируем ключи (уровни доступов) их по возрастанию
+    var indentsKeys = [];
+
+    for (i = 0 ; i<= indents.length-1;i++) {
+        if (indents [i] > 0) {
+            indentsKeys.push(i)
+        };
+    }
+
+    indentsKeys = indentsKeys.sort(function (a, b) {
+        return 0+a - b;
+    });
+
+    // соотносим имеющиеся уровни доступов с их уровнями, начиная с 1
+    var lvl = 1;
+    $.each(indentsKeys, function (key, val) {
+        //items.push('<li id="' + key + '">' + val + '</li>');
+        //tree.push({'text': val.text});
+        indents[val] = lvl++;
+    });
+
+    // рабочий массив
+    var workArr = [[],[],[],[],[],[]]; // предполагаем максимальное кол-во уровней в 6
+
+    var i = 0;
+    // "linkUrl":"#heading=h.1nyf8737emu2"
+    for (i = 0; i <= data.length-1; i++ ){
+        var curIndent = 0+data[i].indentStart;
+        var curLevel = 0+indents[curIndent];
+        var curText = ""+ data[i].text;
+        var curLinkUrl = ""+ data[i].linkUrl;
+        var curUrl = curLinkUrl;
+        curUrl = (""+curUrl).replace( /.*=/, "");
+
+        workArr[curLevel-1].push({text : curText, curHash :  curUrl});
+
+        var nextIndent = 0;
+        var nextLevel = 0;
+
+        if ( i == data.length-1) {
+            //continue;
+            nextLevel = 1;
+            nextIndent = indentsKeys[0];
+        } else {
+            nextIndent = 0+data[i+1].indentStart;
+            nextLevel = 0+indents[nextIndent];
+        }
+
+
+        if (curIndent == nextIndent) {
+            // добавляем текущий уровень
+            //workArr[curLevel-1].push({text : curText});
+        } else if (curIndent < nextIndent) {
+            // добавляем текущий уровень
+            //workArr[curLevel-1].push({text : curText});
+            var j = 0;
+            for (j = curLevel+1; j <= nextLevel-1; j++) {
+                workArr[j-1].push({text : "?????"});
+            }
+        } else {
+            // текущий уровень больше следующего. Надо закрывать.
+            //workArr[curLevel-1].push({text : curText});
+            var j = 0;
+            for (j = curLevel; j >= nextLevel+1; j--) {
+                var curArr = workArr[j-2].pop();
+                curArr.nodes = workArr[j-1];
+                workArr[j-2].push(curArr);
+                workArr[j-1] = [];
+                //workArr[j-1].push({text : "?????"});
+            }
+        }
+    }
+
+    result = workArr[0];
+
+    return result;
+}
+
 function setTOCTree() {
     // Some logic to retrieve, or generate tree structure
     console.log('setTOCTree()');
     //_ijt=qves39b95dmo0h8pt54jok3sft
 
-    var getO = parseQueryString (location.search);
+    var getO = parseQueryString(location.search);
     console.log(getO);
-    var _ijt = getO['_ijt']
-    console.log('_ijt == ['+ _ijt + ']');
+    var _ijt = getO['_ijt'];
+    console.log('_ijt == [' + _ijt + ']');
 
-    $.getJSON('./php.src/gettoc.php'+ (_ijt ? '?_ijt='+_ijt : ''), function (data) {
+    $.getJSON('./php.src/gettoc.php' + (_ijt ? '?_ijt=' + _ijt : ''), function (data) {
         var tree = [];
-        var indents = [];
         console.log('function(data)');
         console.log(data);
-        $.each(data, function (key, val) {
-            //items.push('<li id="' + key + '">' + val + '</li>');
 
-            //tree.push({'text': val.text});
-            indents[val.indentStart] = 1;
-        });
-
-        var indentsKeys = indents.keys();
-        indentsKeys = indentsKeys.sort(function (a,b) {return a-b;});
-
-        var lvl = 1;
-        $.each (indentsKeys, function (key, val) {
-            //items.push('<li id="' + key + '">' + val + '</li>');
-            //tree.push({'text': val.text});
-            indents[key] = lvl++;
-        });
-
-        $.each(data, function (key, val) {
-            //items.push('<li id="' + key + '">' + val + '</li>');
-
-            //tree.push({'text': val.text});
-            //indents[val.indentStart] = 1;
-        });
+        tree = transformDataToTOCTree(data);
 
         $('#agTOCTree').treeview({
             data: tree
         });
+
+        $('#agTOCTree').on('nodeSelected', function(event, data) {
+            // Your logic goes here
+            console.log("You clicked a paragraph!");
+            console.log(event);
+            console.log(data);
+
+            window.open('https://docs.google.com/document/d/1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw/pub?embedded=true'+data.curHash, 'agContentFrame','');
+
+            //$('div#itemIdHolder').html(data.agTime);
+            //$("#jquery_jplayer_1").jPlayer("play", data.agTime);
+        });
+
     }).done(function () {
         console.log("second success");
     })
         .fail(function (d, textStatus, error) {
             //console.log("error");
-            console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+            console.error("getJSON failed, status: " + textStatus + ", error: " + error)
         })
         .always(function () {
             console.log("complete");
         });
 
     return;
-
-    var tree = [
-        {
-            text: "Курс <b>ПРОГРАММА ОБУЧЕНИЯ ПОЖАРНО-ТЕХНИЧЕСКОГО МИНИМУМА ДЛЯ РУКОВОДИТЕЛЕЙ, ОТВЕТСТВЕННЫХ ЗА ПОЖАРНУЮ БЕЗОПАСНОСТЬ ОБЪЕКТОВ КУЛЬТУРЫ, ТЕАТРОВ, КИНОТЕАТРОВ, ЦИРКОВ, КЛУБОВ, БИБЛИОТЕК (Ф2)</b>",
-            agTime: 0,
-            nodes: [
-                {
-                    text: "<b>1.</b> Законодательная база в области пожарной безопасности",
-                    agTime: 0,
-                    nodes: [
-                        {
-                            text: "<b>1.1.</b> Федеральные законы",
-                            agTime: 0,
-
-                        },
-                        {
-                            text: "<b>1.2.</b> Ответственность арендаторов по пожарной безопасности",
-                            agTime: 5,
-
-                        },
-                        {
-                            text: "<b>1.3.</b> Расчет пожарного риска",
-                            agTime: 10,
-                        },
-                        {
-                            text: "<b>1.4.</b> Другие нормативные документы"
-                        }]
-                },
-                {
-                    text: "<b>2.</b> Порядок проведения мероприятий по надзору",
-                    nodes: [
-                        {
-                            text: "<b>2.1.</b> Нормативные акты, ведомственные документы"
-                        },
-                        {
-                            text: "<b>2.2.</b> Принципы защиты лиц при проведении проверок"
-                        },
-                        {
-                            text: "<b>2.3.</b> Предмет проведения проверки"
-                        },
-                        {
-                            text: "<b>2.4.</b> Виды мероприятий по контролю",
-                            nodes: [
-                                {
-                                    text: "<b>2.4.1.</b> Плановая проверка"
-                                },
-                                {
-                                    text: "<b>2.4.2.</b> Внеплановая проверка"
-                                }
-
-                            ]
-                        }]
-                }]
-        },
-        {
-            text: "Еще один замечательный курс"
-        },
-        {
-            text: "Курс №2 пожарной подготовки к самым сложным ситуациям в природе"
-        },
-        {
-            text: "Курс №3 пожарной подготовки к самым сложным ситуациям в природе"
-        },
-        {
-            text: "Курс №4 пожарной подготовки к самым сложным ситуациям в природе"
-        }];
-    return tree;
 }
-
+/*
+$( "div#agTOCTree li.node-agTOCTree" ).each(function( index ) {
+    //console.log( index + ": " + $( this ).text() );
+    console.log( index + ": " + $( this ).text() );
+    //$( this ).append ('<a>fff</a>');
+});
+*/
 
 $(document).ready(function () {
     setTOCTree();
