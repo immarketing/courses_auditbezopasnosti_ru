@@ -120,6 +120,10 @@ function setTOCTree() {
 
         tree = transformDataToTOCTree(data);
 
+        tree = [{ text: "ПТМ ДЛЯ РУКОВОДИТЕЛЕЙ, ОТВЕТСТВЕННЫХ  ЗА ПОЖАРНУЮ БЕЗОПАСНОСТЬ ОБЪЕКТОВ КУЛЬТУРЫ, ТЕАТРОВ, КИНОТЕАТРОВ, ЦИРКОВ, КЛУБОВ, БИБЛИОТЕК (Ф2)",
+            nodes : tree
+        }];
+
         $('#agTOCTree').treeview({
             data: tree
         });
@@ -130,7 +134,7 @@ function setTOCTree() {
             console.log(event);
             console.log(data);
 
-            window.open('https://docs.google.com/document/d/1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw/pub?embedded=true'+data.curHash, 'agContentFrame','');
+            window.open('https://docs.google.com/document/d/1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw/pub?embedded=true#'+(data.curHash ? data.curHash : ""), 'agContentFrame','');
 
             //$('div#itemIdHolder').html(data.agTime);
             //$("#jquery_jplayer_1").jPlayer("play", data.agTime);
