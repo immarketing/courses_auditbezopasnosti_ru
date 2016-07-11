@@ -8,7 +8,9 @@
  */
 function agGetActionsList ($isConsole = false){
     $result = [    ];
-    $res_cons = [];
+    $res_cons = [
+        '__help' => 'agHandle__help' // показываем список всех возможных экшенов
+    ];
     $res_web = [
         'tic'=>'agHandleTic' // обрабатываем Tic-Tac от клиента во время прохождения тестирования
     ];

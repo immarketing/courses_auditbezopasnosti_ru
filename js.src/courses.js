@@ -191,6 +191,8 @@ $(document).ready(function () {
         var $spy = $(this).scrollspy('refresh')
     });
 
+
+    /*
     $(window).scroll(function (eo) {
         //$( "span" ).css( "display", "inline" ).fadeOut( "slow" );
         //console.log("scroll(function(" + eo);
@@ -206,6 +208,7 @@ $(document).ready(function () {
 
         }
     });
+    */
 
     // Add smooth scrolling to all links in navbar + footer link
     $(".navbar a, footer a[href='#myPage']").on('click', function (event) {

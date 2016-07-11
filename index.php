@@ -20,6 +20,13 @@ $actionValue = "";
 if ($is_console) {
     require_once './php.src/agrunconsole.php';
     agHandleConsole();
+    $options = getopt("a:");
+    if ($options) {
+        if ($options['a']) {
+            $actionValue = $options['a'];
+        }
+    }
+    //var_dump($options);
 } else {
     require_once './php.src/agrunweb.php';
     agHandleWeb();
@@ -30,7 +37,9 @@ $actions = agGetActionsList($is_console);
 
 foreach ($actions as $k => $v) {
     if ("".$k === "".$actionValue) {
-        $v();
+        if ( is_callable ($v)) {
+            $v();
+        }
     }
 }
 
