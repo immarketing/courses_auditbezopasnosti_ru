@@ -6,6 +6,11 @@
  * Time: 13:14
  */
 
+function agAnswerJSON ($toSend){
+    header("Content-Type: application/json");
+    echo ( json_encode ($toSend));
+}
+
 function readGoogleTOC ($gdID) {
     $mysqli = new mysqli("localhost", "mysqlcoursesuser", "Ed61a57pe13XA88j", "sfts_courses");
     if (!$mysqli) {

@@ -103,6 +103,24 @@ function transformDataToTOCTree(data) {
     return result;
 }
 
+function sendTic(){
+    var getO = parseQueryString(location.search);
+    var _ijt = getO['_ijt'];
+
+    $.getJSON('./index.php?action=tic&' + (_ijt ? '_ijt=' + _ijt : ''), function (data) {
+        console.log("sendTic() second success");
+    }).done(function () {
+        console.log("sendTic() second success");
+    })
+        .fail(function (d, textStatus, error) {
+            //console.log("error");
+            console.error("sendTic() getJSON failed, status: " + textStatus + ", error: " + error)
+        })
+        .always(function () {
+            console.log("sendTic() complete");
+        });
+}
+
 function setTOCTree() {
     // Some logic to retrieve, or generate tree structure
     console.log('setTOCTree()');
@@ -135,7 +153,7 @@ function setTOCTree() {
             console.log(data);
 
             window.open('https://docs.google.com/document/d/1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw/pub?embedded=true#'+(data.curHash ? data.curHash : ""), 'agContentFrame','');
-
+            sendTic();
             //$('div#itemIdHolder').html(data.agTime);
             //$("#jquery_jplayer_1").jPlayer("play", data.agTime);
         });
