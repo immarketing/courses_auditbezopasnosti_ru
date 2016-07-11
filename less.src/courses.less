@@ -2,41 +2,74 @@
 
 @font-family-sans-serif: 'Open Sans', sans-serif;
 
-body {
+@media (max-width: 990px) {
+  body {
+    div#agContentContainer {
+      display: none;
+    }
 
-  div#agContentContainer {
-    padding-top: 52px; // по умолчанию высота строки меню - 50px
-    min-height: 100%;
-    min-width: 100%;
-    background-color: yellow;
+    div#agWrongResolution {
+      display: -webkit-flex;
+      display: flex;
+      width: 100%;
+      height: 600px;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-align-items: center;
+      align-items: center;
+      background-color: lightgrey;
 
-    div#agContentRow {
-      background-color: yellowgreen;
-      div#agLeftCol {
-        background-color: lightgoldenrodyellow;
-
-        .list-group-item {
-          padding: 5px 10px;
-        }
-
-      }
-      div#agRightCol {
-        background-color: lightyellow;
-
-        iframe#agContentFrameID{
-          min-height: 600px;
-          min-width: 800px;
-          width: 100%;
-          height: 100%;
-          border: none;
-        }
-
+      div#agWrongResolutionRow {
+        background-color: cornflowerblue;
+        width_: 100px;
+        height_: 100px;
+        margin: 10px;
       }
     }
   }
+}
 
-  div#agBottomContainer {
-    background-color: greenyellow;
+@media (min-width: 990px) {
+  body {
+
+    div#agWrongResolution {
+      display: none;
+    }
+
+    div#agContentContainer {
+      padding-top: 52px; // по умолчанию высота строки меню - 50px
+      min-height: 100%;
+      min-width: 100%;
+      background-color: yellow;
+
+      div#agContentRow {
+        background-color: yellowgreen;
+        div#agLeftCol {
+          background-color: lightgoldenrodyellow;
+
+          .list-group-item {
+            padding: 5px 10px;
+          }
+
+        }
+        div#agRightCol {
+          background-color: lightyellow;
+
+          iframe#agContentFrameID {
+            min-height: 600px;
+            min-width: 800px;
+            width: 100%;
+            height: 100%;
+            border: none;
+          }
+
+        }
+      }
+    }
+
+    div#agBottomContainer {
+      background-color: greenyellow;
+    }
   }
 }
 
