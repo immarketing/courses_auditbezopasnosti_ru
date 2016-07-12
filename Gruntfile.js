@@ -365,6 +365,7 @@ module.exports = function (grunt) { /*require('jit-grunt')(grunt);*/
     // grunt.registerTask('default', [ 'uglify','less', 'watch' ]);
     // grunt.registerTask('default', [ 'uglify','less', 'bower_concat' ]);
     grunt.registerTask('default', ['clean', 'less', 'copy:main', 'uglify:build', 'responsive_images']);
+    grunt.registerTask('fastbuild', ['clean', 'less', 'copy:main', 'responsive_images']);
     grunt.registerTask('imagetest', ['responsive_images']);
     grunt.registerTask('prepareserverdeploy', ['default', 'copy:dist', 'htmlmin:dist', 'cssmin:dist', 'uglify:dist', 'file-creator:dist']);
     grunt.registerTask('serverdeploy.alfa', ['default', 'prepareserverdeploy', 'gittag:alfa', 'ftp_push:dist_school_auditbezopasnosti_ru']);
