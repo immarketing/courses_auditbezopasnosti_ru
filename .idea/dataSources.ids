@@ -6,28 +6,30 @@
       <identifier-quote-string>`</identifier-quote-string>
     </database-info>
     <case-sensitivity plain-identifiers="mixed" quoted-identifiers="upper"/>
-    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.5">
-      <schema id="1" name="sfts_courses"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.6">
+      <schema id="1" name="sfts_courses">
+        <visible>1</visible>
+      </schema>
       <table id="2" parent="1" name="agCourses"/>
       <column id="3" parent="2" name="id">
         <mandatory>1</mandatory>
-        <data-type>int(11)</data-type>
+        <data-type>int(11)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="4" parent="2" name="ShortName">
-        <data-type>varchar(100)</data-type>
+        <data-type>varchar(100)|0</data-type>
       </column>
       <column id="5" parent="2" name="Name">
         <mandatory>1</mandatory>
-        <data-type>varchar(200)</data-type>
+        <data-type>varchar(200)|0</data-type>
       </column>
       <column id="6" parent="2" name="googleDocID">
         <mandatory>1</mandatory>
-        <data-type>varchar(50)</data-type>
+        <data-type>varchar(50)|0</data-type>
       </column>
       <column id="7" parent="2" name="TOCJSON">
         <mandatory>1</mandatory>
-        <data-type>varchar(20000)</data-type>
+        <data-type>varchar(20000)|0</data-type>
         <default-expression>&apos;&apos;</default-expression>
       </column>
       <key id="8" parent="2" name="PRIMARY">

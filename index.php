@@ -14,6 +14,7 @@ $is_console = PHP_SAPI == 'cli' || (!isset($_SERVER['DOCUMENT_ROOT']) && !isset(
 require 'vendor/autoload.php';
 require_once './php.src/aglib.php';
 require_once './php.src/agactions.php';
+require_once './php.src/agconst.php';
 
 $actionValue = "";
 
@@ -30,7 +31,7 @@ if ($is_console) {
 } else {
     require_once './php.src/agrunweb.php';
     agHandleWeb();
-    $actionValue = $_GET['action'];
+    $actionValue = $_REQUEST[AG_PN_ACTION]; // на самом деле, может приходить и из ГКТ и из ПОСТ
 }
 
 $actions = agGetActionsList($is_console);

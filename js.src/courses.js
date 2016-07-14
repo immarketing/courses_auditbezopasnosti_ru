@@ -108,7 +108,10 @@ function sendTic(){
     var _ijt = getO['_ijt'];
 
     $.getJSON('./index.php?action=tic&' + (_ijt ? '_ijt=' + _ijt : ''), function (data) {
-        console.log("sendTic() second success");
+        console.log("sendTic() success");
+        console.log(data);
+        agTICResult = data;
+        console.log(agTICResult);
     }).done(function () {
         console.log("sendTic() second success");
     })
@@ -119,6 +122,17 @@ function sendTic(){
         .always(function () {
             console.log("sendTic() complete");
         });
+}
+
+function showLearningPanel () {
+    $("div#agLearning").removeClass('agDisplayNone');
+    $("div#agTesting").addClass('agDisplayNone');
+
+}
+
+function showTestingPanel (){
+    $("div#agTesting").removeClass('agDisplayNone');
+    $("div#agLearning").addClass('agDisplayNone');
 }
 
 function setTOCTree() {
@@ -133,13 +147,14 @@ function setTOCTree() {
 
     $.getJSON('./php.src/gettoc.php' + (_ijt ? '?_ijt=' + _ijt : ''), function (data) {
         var tree = [];
-        console.log('function(data)');
-        console.log(data);
+
+        //console.log('function(data)');
+        //console.log(data);
 
         tree = transformDataToTOCTree(data);
 
         tree = [{ text: "ПТМ ДЛЯ РУКОВОДИТЕЛЕЙ, ОТВЕТСТВЕННЫХ  ЗА ПОЖАРНУЮ БЕЗОПАСНОСТЬ ОБЪЕКТОВ КУЛЬТУРЫ, ТЕАТРОВ, КИНОТЕАТРОВ, ЦИРКОВ, КЛУБОВ, БИБЛИОТЕК (Ф2)",
-            nodes : tree
+            nodes : [{text:'ОБУЧЕНИЕ', nodes :tree, curHash: "" }, {text : 'ТЕСТИРОВАНИЕ', try2Test:""}]
         }];
 
         $('#agTOCTree').treeview({
@@ -148,12 +163,30 @@ function setTOCTree() {
 
         $('#agTOCTree').on('nodeSelected', function(event, data) {
             // Your logic goes here
+            /*
             console.log("You clicked a paragraph!");
             console.log(event);
+            */
             console.log(data);
 
-            window.open('https://docs.google.com/document/d/1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw/pub?embedded=true#'+(data.curHash ? data.curHash : ""), 'agContentFrame','');
-            sendTic();
+            if ('curHash' in data) {
+                window.open('https://docs.google.com/document/d/1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw/pub?embedded=true#'+(data.curHash ? data.curHash : ""), 'agContentFrame','');
+                showLearningPanel();
+                sendTic();
+            }
+
+            if ('try2Test' in data) {
+                console.log(data);
+                if (('result' in window.agTICResult) && ("OK"===window.agTICResult.result)) {
+                    // все должно быть ОК
+                    console.log('RESULT === OK');
+                    showTestingPanel();
+                } else {
+                    console.log('RESULT !== OK');
+                    showLearningPanel ();
+                }
+            }
+
             //$('div#itemIdHolder').html(data.agTime);
             //$("#jquery_jplayer_1").jPlayer("play", data.agTime);
         });
@@ -181,6 +214,8 @@ $( "div#agTOCTree li.node-agTOCTree" ).each(function( index ) {
 
 $(document).ready(function () {
     setTOCTree();
+
+    showLearningPanel();
 
     $('.agImagePopup').magnificPopup({
         type: 'image'
@@ -249,3 +284,6 @@ $(document).ready(function () {
         //$("a.navbar-brand").show(800);
     });
 });
+
+var agTICResult = {};
+

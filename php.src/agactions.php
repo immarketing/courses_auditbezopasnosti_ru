@@ -6,13 +6,17 @@
  * Date: 11.07.2016
  * Time: 9:12
  */
+
+require_once 'agconst.php';
+
 function agGetActionsList ($isConsole = false){
     $result = [    ];
     $res_cons = [
         '__help' => 'agHandle__help' // показываем список всех возможных экшенов
     ];
     $res_web = [
-        'tic'=>'agHandleTic' // обрабатываем Tic-Tac от клиента во время прохождения тестирования
+        AG_AN_TIC =>'agHandleTic', // обрабатываем Tic-Tac от клиента во время прохождения тестирования
+        AG_AN_GETTESTINGJSON =>'agHandleGetTestingJSON', // обрабатываем Tic-Tac от клиента во время прохождения тестирования
     ];
 
     if ($isConsole) {
