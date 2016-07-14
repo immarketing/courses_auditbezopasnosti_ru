@@ -245,6 +245,7 @@ $(document).ready(function () {
     loadTestingJSON();
 
     showLearningPanel();
+    showTestingPanel();
 
     $('.agImagePopup').magnificPopup({
         type: 'image'
