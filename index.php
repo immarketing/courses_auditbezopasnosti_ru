@@ -18,8 +18,10 @@ require_once './php.src/agconst.php';
 
 $actionValue = "";
 
+require_once './php.src/agrunconsole.php';
+require_once './php.src/agrunweb.php';
+
 if ($is_console) {
-    require_once './php.src/agrunconsole.php';
     agHandleConsole();
     $options = getopt("a:");
     if ($options) {
@@ -29,7 +31,6 @@ if ($is_console) {
     }
     //var_dump($options);
 } else {
-    require_once './php.src/agrunweb.php';
     agHandleWeb();
     $actionValue = $_REQUEST[AG_PN_ACTION]; // на самом деле, может приходить и из ГКТ и из ПОСТ
 }

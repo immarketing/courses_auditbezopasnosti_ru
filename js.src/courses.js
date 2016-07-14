@@ -131,8 +131,36 @@ function showLearningPanel () {
 }
 
 function showTestingPanel (){
+    loadTestingJSON();
     $("div#agTesting").removeClass('agDisplayNone');
     $("div#agLearning").addClass('agDisplayNone');
+}
+
+function loadTestingJSON (){
+    if (agTestingData.loaded) {
+        return;
+    }
+    var getO = parseQueryString(location.search);
+    var _ijt = getO['_ijt'];
+    $.getJSON('./index.php?action=gettestingjson&' + (_ijt ? '_ijt=' + _ijt : ''), function (data) {
+        console.log("loadTestingJSON() success");
+        console.log(data);
+        //agTICResult = data;
+        //console.log(agTICResult);
+        agTestingData.loaded = true;
+        agTestingData.data = data;
+    }).done(function () {
+        console.log("loadTestingJSON() second success");
+    })
+        .fail(function (d, textStatus, error) {
+            //console.log("error");
+            console.error("loadTestingJSON() getJSON failed, status: " + textStatus + ", error: " + error);
+            agTestingData.loaded = false;
+            agTestingData.data = [];
+        })
+        .always(function () {
+            console.log("loadTestingJSON() complete");
+        });
 }
 
 function setTOCTree() {
@@ -214,6 +242,7 @@ $( "div#agTOCTree li.node-agTOCTree" ).each(function( index ) {
 
 $(document).ready(function () {
     setTOCTree();
+    loadTestingJSON();
 
     showLearningPanel();
 
@@ -286,4 +315,6 @@ $(document).ready(function () {
 });
 
 var agTICResult = {};
+//var agTestingJSON = {};
+var agTestingData = { loaded : false, data: []};
 
