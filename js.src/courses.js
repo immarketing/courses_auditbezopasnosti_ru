@@ -136,6 +136,126 @@ function showTestingPanel (){
     $("div#agLearning").addClass('agDisplayNone');
 }
 
+function agClickPrevBtn() {
+    agClickAnswrsBtn(-1);
+}
+
+function agStoreQuestion (){
+    $("#agTestingAnswrOpt1").text("" + (agTestingData.data[agTestingData.curQuestion].qAns1));
+    $("#agTestingAnswrOpt2").text("" + (agTestingData.data[agTestingData.curQuestion].qAns2));
+    $("#agTestingAnswrOpt3").text("" + (agTestingData.data[agTestingData.curQuestion].qAns3));
+    $("#agTestingAnswrOpt4").text("" + (agTestingData.data[agTestingData.curQuestion].qAns4));
+    $("#agTestingAnswrOpt5").text("" + (agTestingData.data[agTestingData.curQuestion].qAns5));
+    $("#agTestingAnswrOpt6").text("" + (agTestingData.data[agTestingData.curQuestion].qAns6));
+
+    if ($("#agTestingAnswrRdo1").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=1};
+    if ($("#agTestingAnswrRdo2").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=2};
+    if ($("#agTestingAnswrRdo3").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=3};
+    if ($("#agTestingAnswrRdo4").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=4};
+    if ($("#agTestingAnswrRdo5").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=5};
+    if ($("#agTestingAnswrRdo6").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=6};
+
+}
+
+
+function agClickAnswrsBtn(drctn ) {
+    if (drctn > 0) {
+        if (agTestingData.curQuestion == (agTestingData.data.length-1)) {
+            return;
+        }
+    } else if (drctn < 0) {
+        if (agTestingData.curQuestion == 0) {
+            return;
+        }
+    } else if (drctn == 0) {
+        retufn;
+    }
+
+    var element = $( this );
+    console.log(element);
+
+    agStoreQuestion();
+    agTestingData.curQuestion += (drctn<0?-1:1);
+    displayTesting();
+}
+
+function agClickNextBtn() {
+    agClickAnswrsBtn(1);
+}
+
+function displayTesting (){
+    // показываем тестирование на экране
+    var aQuestion = agTestingData.data[agTestingData.curQuestion];
+
+    // agTestingAnswrBtnsPrev
+    if (agTestingData.curQuestion == 0) {
+        $("#agTestingAnswrBtnsPrev").addClass('disabled');
+    } else {
+        $("#agTestingAnswrBtnsPrev").removeClass('disabled');
+    }
+
+    // agTestingAnswrBtnsNext
+    if (agTestingData.curQuestion == (agTestingData.data.length-1)) {
+        $("#agTestingAnswrBtnsNext").addClass('disabled');
+    } else {
+        $("#agTestingAnswrBtnsNext").removeClass('disabled');
+    }
+
+    // agTestingAnsrsCurAns
+    $("#agTestingAnsrsCurAns").text("" + (agTestingData.curQuestion + 1));
+
+    // agTestingAnsrsTotal
+    $("#agTestingAnsrsTotal").text("" + (agTestingData.data.length));
+
+    // agTestingAnswrOpt1
+    $("#agTestingAnswrOpt1").text("" + (agTestingData.data[agTestingData.curQuestion].qAns1));
+    $("#agTestingAnswrRdo1").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 1));
+    $("#agTestingAnswrOpt2").text("" + (agTestingData.data[agTestingData.curQuestion].qAns2));
+    $("#agTestingAnswrRdo2").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 2));
+    $("#agTestingAnswrOpt3").text("" + (agTestingData.data[agTestingData.curQuestion].qAns3));
+    $("#agTestingAnswrRdo3").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 3));
+    $("#agTestingAnswrOpt4").text("" + (agTestingData.data[agTestingData.curQuestion].qAns4));
+    $("#agTestingAnswrRdo4").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 4));
+    $("#agTestingAnswrOpt5").text("" + (agTestingData.data[agTestingData.curQuestion].qAns5));
+    $("#agTestingAnswrRdo5").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 5));
+    $("#agTestingAnswrOpt6").text("" + (agTestingData.data[agTestingData.curQuestion].qAns6));
+    $("#agTestingAnswrRdo6").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 6));
+
+    // agTestingAnsrsAnsText
+    $("#agTestingAnsrsAnsText").text("" + (agTestingData.data[agTestingData.curQuestion].qText));
+}
+
+function normalizeTestingData() {
+    // нормализация данных в списке вопросов
+    if (! agTestingData.loaded) {
+        return;
+    }
+
+    var tData = agTestingData.data;
+
+    for (var i = agTestingData.data.length -1; i >= 0 ; i--){
+        var cQuest = agTestingData.data[i];
+
+        if (""==cQuest.qText) {
+            // надо удалить этот элемент из массива
+            agTestingData.data.splice (i,1);
+            continue;
+        }
+    }
+    for (var i = agTestingData.data.length -1; i >= 0 ; i--){
+        agTestingData.data[i].noByOrder = i +1; // номер по порядку
+    }
+}
+
+function initTestingData(dt) {
+    agTestingData.data = dt;
+    agTestingData.loaded = true;
+    agTestingData.curQuestion = 0;
+
+    normalizeTestingData();
+    displayTesting();
+}
+
 function loadTestingJSON (){
     if (agTestingData.loaded) {
         return;
@@ -147,8 +267,7 @@ function loadTestingJSON (){
         console.log(data);
         //agTICResult = data;
         //console.log(agTICResult);
-        agTestingData.loaded = true;
-        agTestingData.data = data;
+        initTestingData(data);
     }).done(function () {
         console.log("loadTestingJSON() second success");
     })
@@ -157,6 +276,7 @@ function loadTestingJSON (){
             console.error("loadTestingJSON() getJSON failed, status: " + textStatus + ", error: " + error);
             agTestingData.loaded = false;
             agTestingData.data = [];
+            loadTestingJSON();
         })
         .always(function () {
             console.log("loadTestingJSON() complete");
