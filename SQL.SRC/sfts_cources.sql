@@ -16,23 +16,23 @@ CREATE DATABASE IF NOT EXISTS `sfts_courses` /*!40100 DEFAULT CHARACTER SET utf8
 USE `sfts_courses`;
 
 
--- Дамп структуры для таблица sfts_courses.agCourses
-DROP TABLE IF EXISTS `agCourses`;
-CREATE TABLE IF NOT EXISTS `agCourses` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ShortName` varchar(100) DEFAULT NULL,
-  `Name` varchar(200) NOT NULL,
-  `googleDocID` varchar(50) NOT NULL,
-  `TOCJSON` varchar(20000) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- Дамп данных таблицы sfts_courses.agCourses: ~1 rows (приблизительно)
-DELETE FROM `agCourses`;
-/*!40000 ALTER TABLE `agCourses` DISABLE KEYS */;
-INSERT INTO `agCourses` (`id`, `ShortName`, `Name`, `googleDocID`, `TOCJSON`) VALUES
-	(1, 'ПТМ руководителей культуры', 'ПРОГРАММА ОБУЧЕНИЯ ПОЖАРНО-ТЕХНИЧЕСКОГО МИНИМУМА ДЛЯ РУКОВОДИТЕЛЕЙ, ОТВЕТСТВЕННЫХ  ЗА ПОЖАРНУЮ БЕЗОПАСНОСТЬ ОБЪЕКТОВ КУЛЬТУРЫ, ТЕАТРОВ, КИНОТЕАТРОВ, ЦИРКОВ, КЛУБОВ, БИБЛИОТЕК (Ф2)', '1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw', '[{"text":"1. Законодательная база в области пожарной безопасности","indentStart":18,"indentFirstLine":18,"linkUrl":"#heading=h.q50xcdyevsl5"},{"text":"1.1. Федеральные законы","indentStart":36,"indentFirstLine":36,"linkUrl":"#heading=h.1nyf8737emu2"},{"text":"1.2. Ответственность арендаторов по пожарной безопасности","indentStart":36,"indentFirstLine":36,"linkUrl":"#heading=h.m5e0wz3w5zz4"},{"text":"1.3.Расчет и независимая оценка пожарного риска","indentStart":36,"indentFirstLine":36,"linkUrl":"#heading=h.bhcv33666er6"},{"text":"1.4. Другие нормативные документы","indentStart":36,"indentFirstLine":36,"linkUrl":"#heading=h.g8507c64r9ht"},{"text":"1.5. Работы и услуги в области пожарной безопасности","indentStart":36,"indentFirstLine":36,"linkUrl":"#heading=h.nmdhp974mfae"},{"text":"3. Порядок проведения мероприятий по надзору","indentStart":18,"indentFirstLine":18,"linkUrl":"#heading=h.p66q3gyqyksa"},{"text":"3.1. Нормативные акты, ведомственные документы","indentStart":36,"indentFirstLine":36,"linkUrl":"#heading=h.nyti6xpri806"},{"text":"3.1. Нормативные акты, ведомственные документы","indentStart":36,"indentFirstLine":36,"linkUrl":"#heading=h.m43ii0fdkcp6"},{"text":"3.1. Нормативные акты, ведомственные документы","indentStart":36,"indentFirstLine":36,"linkUrl":"#heading=h.qmub3psbsd05"}]');
-/*!40000 ALTER TABLE `agCourses` ENABLE KEYS */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+CREATE TABLE agCourses
+(
+  id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  ShortName VARCHAR(100),
+  Name VARCHAR(200) NOT NULL,
+  googleDocID VARCHAR(50) NOT NULL,
+  TOCJSON VARCHAR(20000) DEFAULT '' NOT NULL
+);
+CREATE TABLE agPupils
+(
+  id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  fName VARCHAR(100) NOT NULL,
+  lName VARCHAR(100) NOT NULL,
+  pwd1 VARCHAR(100) NOT NULL,
+  pwd2 VARCHAR(100) NOT NULL,
+  courseID INT(11) NOT NULL,
+  login VARCHAR(100) NOT NULL
+);
+CREATE UNIQUE INDEX agPupils_id_uindex ON agpupils (id);
+CREATE UNIQUE INDEX agPupils_login_uindex ON agpupils (login);
