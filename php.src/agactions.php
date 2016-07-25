@@ -12,7 +12,9 @@ require_once 'agconst.php';
 function agGetActionsList ($isConsole = false){
     $result = [    ];
     $res_cons = [
+        // имя_параметра = имя_вызываемой_процедуры
         '__help' => 'agHandle__help' // показываем список всех возможных экшенов
+        , '__testcrypt' => 'agHandle__testcrypt' // пробуем хэширование паролей
     ];
     $res_web = [
         AG_AN_TIC =>'agHandleTic', // обрабатываем Tic-Tac от клиента во время прохождения тестирования

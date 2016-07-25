@@ -14,7 +14,15 @@ function agHandle__help() {
     echo "Web actions:\n";
     var_dump($wa);
 
-    agHandleGetTestingJSON();
+    //agHandleGetTestingJSON();
+}
+
+function agHandle__testcrypt() {
+    $p = 'pwd';
+    $ph = password_hash ( $p, PASSWORD_DEFAULT, [
+        'cost' => 14,
+    ]);
+    echo "$p => $ph \n";
 }
 
 

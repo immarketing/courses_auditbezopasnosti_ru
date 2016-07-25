@@ -12,6 +12,7 @@
 $is_console = PHP_SAPI == 'cli' || (!isset($_SERVER['DOCUMENT_ROOT']) && !isset($_SERVER['REQUEST_URI']));
 
 require 'vendor/autoload.php';
+//require_once '/path/to/your-project/vendor/autoload.php';
 require_once './php.src/aglib.php';
 require_once './php.src/agactions.php';
 require_once './php.src/agconst.php';
