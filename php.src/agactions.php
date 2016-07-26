@@ -15,6 +15,7 @@ function agGetActionsList ($isConsole = false){
         // имя_параметра = имя_вызываемой_процедуры
         '__help' => 'agHandle__help' // показываем список всех возможных экшенов
         , '__testcrypt' => 'agHandle__testcrypt' // пробуем хэширование паролей
+        , '__updppl' => 'agHandle__updatePupilsInDB' // корректируем таблицу обучающихся в БД
     ];
     $res_web = [
         AG_AN_TIC =>'agHandleTic', // обрабатываем Tic-Tac от клиента во время прохождения тестирования
