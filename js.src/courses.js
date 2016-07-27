@@ -148,12 +148,12 @@ function agStoreQuestion (){
     $("#agTestingAnswrOpt5").text("" + (agTestingData.data[agTestingData.curQuestion].qAns5));
     $("#agTestingAnswrOpt6").text("" + (agTestingData.data[agTestingData.curQuestion].qAns6));
 
-    if ($("#agTestingAnswrRdo1").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=1};
-    if ($("#agTestingAnswrRdo2").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=2};
-    if ($("#agTestingAnswrRdo3").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=3};
-    if ($("#agTestingAnswrRdo4").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=4};
-    if ($("#agTestingAnswrRdo5").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=5};
-    if ($("#agTestingAnswrRdo6").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=6};
+    if ($("#agTestingAnswrRdo1").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=1}
+    if ($("#agTestingAnswrRdo2").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=2}
+    if ($("#agTestingAnswrRdo3").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=3}
+    if ($("#agTestingAnswrRdo4").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=4}
+    if ($("#agTestingAnswrRdo5").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=5}
+    if ($("#agTestingAnswrRdo6").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=6}
 
 }
 
@@ -168,7 +168,7 @@ function agClickAnswrsBtn(drctn ) {
             return;
         }
     } else if (drctn == 0) {
-        retufn;
+        return;
     }
 
     var element = $( this );
@@ -220,7 +220,6 @@ function displayTesting (){
     $("#agTestingAnswrRdo5").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 5));
     $("#agTestingAnswrOpt6").text("" + (agTestingData.data[agTestingData.curQuestion].qAns6));
     $("#agTestingAnswrRdo6").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 6));
-
     // agTestingAnsrsAnsText
     $("#agTestingAnsrsAnsText").text("" + (agTestingData.data[agTestingData.curQuestion].qText));
 }
