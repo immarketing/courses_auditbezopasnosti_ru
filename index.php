@@ -1,4 +1,13 @@
 <?php
+if (! empty ( $_COOKIE ['sid'] )) {
+    // check session id in cookies
+    session_id ( $_COOKIE ['sid'] );
+}
+
+session_start ();
+
+?>
+<?php
 /**
  * Created by PhpStorm.
  * Входящая точка для всех рабочих скриптов
@@ -44,5 +53,10 @@ foreach ($actions as $k => $v) {
             $v();
         }
     }
+}
+
+if (!$is_console && !isWebDefaultPrevented()) {
+    require_once('indx.php');
+
 }
 
