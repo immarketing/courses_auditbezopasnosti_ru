@@ -17,9 +17,11 @@ function agGetActionsList ($isConsole = false){
         , '__testcrypt' => 'agHandle__testcrypt' // пробуем хэширование паролей
         , '__updppl' => 'agHandle__updatePupilsInDB' // корректируем таблицу обучающихся в БД
     ];
+
     $res_web = [
         AG_AN_TIC =>'agHandleTic', // обрабатываем Tic-Tac от клиента во время прохождения тестирования
         AG_AN_GETTESTINGJSON =>'agHandleGetTestingJSON', // обрабатываем Tic-Tac от клиента во время прохождения тестирования
+        AG_AN_PHPINFO => 'agHandlePHPInfo' // просто показываем PHPInfo
     ];
 
     if ($isConsole) {

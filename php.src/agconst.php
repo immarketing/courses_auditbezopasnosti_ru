@@ -17,6 +17,7 @@ define('AG_PN_COURSEID', 'courseid' );
 // список возможных действий (AN - Action Name) для action
 define('AG_AN_TIC', 'tic' );
 define('AG_AN_GETTESTINGJSON', 'gettestingjson' );
+define('AG_AN_PHPINFO', 'phpinfo' );
 
 
 // ^

@@ -3,9 +3,22 @@
 require_once 'aglib.php';
 require_once 'agactions.php';
 
+$preventWebDefault = false;
+
+function isWebDefaultPrevented (){
+    global $preventWebDefault;
+    return $preventWebDefault;
+
+}
+function preventWebDefault (){
+    global $preventWebDefault;
+    $preventWebDefault = true;
+}
+
 
 function agHandleGetTestingJSON () {
     global $is_console;
+    preventWebDefault();
     // http://localhost:63342/courses_auditbezopasnosti_ru/index.php?action=gettestingjson&
     // пока мне эта информация не нужна
     $courseID ='';
@@ -31,7 +44,13 @@ function agHandleGetTestingJSON () {
 
 function agHandleTic(){
     $res = ['result'=>"OK"];
+    preventWebDefault();
     agAnswerJSON($res);
+}
+
+function agHandlePHPInfo(){
+    preventWebDefault();
+    phpinfo();
 }
 
 function agHandleWeb (){
