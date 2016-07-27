@@ -4,7 +4,7 @@
 
 function agClickSubmitBtn(event) {
     event.preventDefault();
-    log("dddd")
+    //log("dddd")
 }
 
 
