@@ -30,6 +30,7 @@ $actionValue = "";
 
 require_once './php.src/agrunconsole.php';
 require_once './php.src/agrunweb.php';
+require_once './php.src/classes/Auth.class.php';
 
 if ($is_console) {
     agHandleConsole();
@@ -56,7 +57,6 @@ foreach ($actions as $k => $v) {
 }
 
 if (!$is_console && !isWebDefaultPrevented()) {
-    require_once('indx.php');
-
+    require('indx.php');
 }
 

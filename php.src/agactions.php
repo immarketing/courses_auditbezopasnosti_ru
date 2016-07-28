@@ -22,6 +22,7 @@ function agGetActionsList ($isConsole = false){
         AG_AN_TIC =>'agHandleTic', // обрабатываем Tic-Tac от клиента во время прохождения тестирования
         AG_AN_GETTESTINGJSON =>'agHandleGetTestingJSON', // обрабатываем Tic-Tac от клиента во время прохождения тестирования
         AG_AN_PHPINFO => 'agHandlePHPInfo' // просто показываем PHPInfo
+        , AG_AN_LOGIN => 'agHandleLogin' // обрабатываем попытку входа
     ];
 
     if ($isConsole) {

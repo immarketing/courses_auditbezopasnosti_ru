@@ -18,6 +18,7 @@ define('AG_PN_COURSEID', 'courseid' );
 define('AG_AN_TIC', 'tic' );
 define('AG_AN_GETTESTINGJSON', 'gettestingjson' );
 define('AG_AN_PHPINFO', 'phpinfo' );
+define('AG_AN_LOGIN', 'login' );
 
 
 // ^

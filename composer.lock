@@ -152,17 +152,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.5",
-            "target-dir": "Google/Service",
+            "version": "v0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "a2d43f4c7eace8c7aa16c5ea83191344c63b4526"
+                "reference": "68290c3645498cf911d0d2552645bcee5c5f23f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/a2d43f4c7eace8c7aa16c5ea83191344c63b4526",
-                "reference": "a2d43f4c7eace8c7aa16c5ea83191344c63b4526",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/68290c3645498cf911d0d2552645bcee5c5f23f2",
+                "reference": "68290c3645498cf911d0d2552645bcee5c5f23f2",
                 "shasum": ""
             },
             "require": {
@@ -171,7 +170,7 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Google_Service_": ""
+                    "Google_Service_": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -183,7 +182,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2016-07-21 18:01:41"
+            "time": "2016-07-27 20:26:55"
         },
         {
             "name": "google/auth",

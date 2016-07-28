@@ -1,3 +1,13 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: AVGorbunov
+ * Date: 28.07.2016
+ * Time: 13:49
+ */
+
+
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -21,8 +31,8 @@
     <link href="./css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <link
-            href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Open+Sans+Condensed:300,700&subset=latin,cyrillic'
-            rel='stylesheet' type='text/css'>
+        href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Open+Sans+Condensed:300,700&subset=latin,cyrillic'
+        rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" type="text/css" href="./css/animate.css"/>
     <link href="./css/font-awesome.css" rel="stylesheet">
@@ -33,13 +43,13 @@
 <body>
 
 
-<form class="form-signin ajax" method="post" action="index.php">
+<form class="form-signin ajax" method="post" action="" id="loginform">
     <div class="main-error alert alert-error hide"></div>
 
     <h2 class="form-signin-heading">Введите ваш логин и пароль</h2>
-    <input name="username" type="text" class="input-block-level"
+    <input name="username" type="text" class="input-block-level agCheckValue"
            placeholder="Логин" autofocus>
-    <input name="password" type="password" class="input-block-level" placeholder="Пароль">
+    <input name="password" type="password" class="input-block-level agCheckValue" placeholder="Пароль">
     <!-- <label
     class="checkbox">
     <input name="remember-me" type="checkbox"
@@ -47,8 +57,11 @@
 </label>  -->
     <input type="hidden" name="act" value="login">
 
+    <!--
+
     <input type="hidden" name="XDEBUG_SESSION_START" value="<?php echo $_REQUEST['XDEBUG_SESSION_START'];?>">
     <input type="hidden" name="KEY" value="<?php echo $_REQUEST['KEY'];?>">
+    -->
 
     <div class="alert alert-info" >
         <p>
@@ -58,7 +71,7 @@
 
     <div class="g-recaptcha" data-sitekey="6LcnDSYTAAAAAAddH-u5a0-secthUO8VJUYYHWF2"></div>
 
-    <button class="btn btn-large btn-primary" type1="submit1" onclick="agClickSubmitBtn(event)">Вход</button>
+    <button class="btn btn-large btn-primary" type1="submit1" >Вход</button>
 </form>
 
 
