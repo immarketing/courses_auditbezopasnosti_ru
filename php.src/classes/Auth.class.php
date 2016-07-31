@@ -1,6 +1,11 @@
 <?php
 
-namespace Auth;
+namespace  {
+    require_once '../aglib.php';
+}
+
+
+namespace Auth {
 
 class User
 {
@@ -70,7 +75,19 @@ class User
     	} else {
     		//return false;
     	}
-    	
+    	$db = connectDB();
+
+        $query = "select id, login, pwd1 from sfts_courses.agpupils where
+            login = :username and pwd1 = :password limit 1";
+        $sth = $db->prepare($query);
+        $sth->execute(
+            array(
+                ":username" => $username,
+                ":password" => $password,
+            )
+        );
+        $this->user = $sth->fetch();
+
     	/*
         $query = "select id, username from users where
             username = :username and password = :password limit 1";
@@ -91,12 +108,10 @@ class User
         $this->user = $sth->fetch();
         */
         
-        if (! ($username === '111' && $password = '111') /*$this->user*/) {
+        if (!$this->user) {
             $this->is_authorized = false;
         } else {
-        	$this->user['id'] = '111';
-        	$this->user['username'] = '111';
-        	 
+
             $this->is_authorized = true;
             $this->user_id = $this->user['id'];
             $this->saveSession($remember);
@@ -116,7 +131,7 @@ class User
     {
         $_SESSION["user_id"] = $this->user_id;
 
-        if ($remember || true) {
+        if ($remember ) {
             // Save session id in cookies
             $sid = session_id();
 
@@ -180,4 +195,5 @@ class User
 
         return $this;
     }
+}
 }
