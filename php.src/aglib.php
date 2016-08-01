@@ -20,8 +20,45 @@ function agAnswerJSON ($toSend){
     echo ( json_encode ($toSend));
 }
 
+function initJSONReply () {
+    $rpl = [
+        'status'=>"OK"
+        , ''
+    ];
+    return $rpl;
+}
+
+function readTests ($id) {
+    try {
+        $db = connectDB();
+        $query = "select * from agtests where id = ? limit 1";
+        $sth = $db->prepare($query);
+        $sth->bind_param('i', $id);
+        $sth->execute( );
+        $result = $sth->get_result();
+        return $result->fetch_assoc();
+    } catch (Exception $e){
+        throw $e;
+    }
+}
+
+function readCourses ($id){
+    try {
+        $db = connectDB();
+        $query = "select * from agcourses where id = ? limit 1";
+        $sth = $db->prepare($query);
+        $sth->bind_param('i', $id);
+        $sth->execute( );
+        $result = $sth->get_result();
+        return $result->fetch_assoc();
+    } catch (Exception $e){
+        throw $e;
+    }
+}
+
 function readGoogleTOC ($gdID) {
-    $mysqli = new mysqli("localhost", "mysqlcoursesuser", "Ed61a57pe13XA88j", "sfts_courses");
+    //$mysqli = new mysqli("localhost", "mysqlcoursesuser", "Ed61a57pe13XA88j", "sfts_courses");
+    $mysqli = connectDB();
     if (!$mysqli) {
         die("Connection failed: " . $mysqli->connect_error);
     }

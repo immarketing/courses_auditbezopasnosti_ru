@@ -58,7 +58,7 @@
             <a class="navbar-brand" href="#">НОУ ДОПК "Школа безопасности"</a> -->
         </div>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Выйти</a></li>
+            <li><a href="#" id="agLogout">Выйти</a></li>
         </ul>
     </div>
 </nav>

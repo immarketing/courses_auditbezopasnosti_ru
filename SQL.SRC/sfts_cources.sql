@@ -69,15 +69,16 @@ CREATE TABLE IF NOT EXISTS `agpupils` (
   UNIQUE KEY `agPupils_login_uindex` (`login`),
   KEY `agpupils_agCourses_id_fk` (`courseID`),
   KEY `agpupils_agtests_id_fk` (`testID`),
-  CONSTRAINT `agpupils_agtests_id_fk` FOREIGN KEY (`testID`) REFERENCES `agtests` (`id`),
-  CONSTRAINT `agpupils_agCourses_id_fk` FOREIGN KEY (`courseID`) REFERENCES `agCourses` (`id`)
+  KEY `agpupils_login_pwd1_index` (`login`,`pwd1`),
+  CONSTRAINT `agpupils_agCourses_id_fk` FOREIGN KEY (`courseID`) REFERENCES `agCourses` (`id`),
+  CONSTRAINT `agpupils_agtests_id_fk` FOREIGN KEY (`testID`) REFERENCES `agtests` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы sfts_courses.agpupils: ~4 rows (приблизительно)
 DELETE FROM `agpupils`;
 /*!40000 ALTER TABLE `agpupils` DISABLE KEYS */;
 INSERT INTO `agpupils` (`id`, `fName`, `lName`, `pwd1`, `pwd2`, `courseID`, `login`, `testID`) VALUES
-	(1, 'Алексей', 'Горбунов', '714537', NULL, NULL, '100001', NULL),
+	(1, 'Алексей', 'Горбунов', '111111', NULL, 1, '100001', NULL),
 	(2, 'Сергей', 'Иванов', '548547', NULL, NULL, '100002', NULL),
 	(3, 'Иван', 'Сергеев', '935586', NULL, NULL, '100003', NULL),
 	(4, 'Маша', 'Суралмаша', '999303', NULL, NULL, '100004', NULL);

@@ -120,66 +120,71 @@
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <index id="33" parent="5" name="agPupils_login_uindex">
+      <index id="33" parent="5" name="agpupils_login_pwd1_index">
+        <columns>login
+pwd1</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <index id="34" parent="5" name="agPupils_login_uindex">
         <columns>login</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <key id="34" parent="5" name="PRIMARY">
+      <key id="35" parent="5" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
-      <key id="35" parent="5" name="agPupils_id_uindex">
+      <key id="36" parent="5" name="agPupils_id_uindex">
         <columns>id</columns>
         <underlying-index>agPupils_id_uindex</underlying-index>
       </key>
-      <key id="36" parent="5" name="agPupils_login_uindex">
+      <key id="37" parent="5" name="agPupils_login_uindex">
         <columns>login</columns>
         <underlying-index>agPupils_login_uindex</underlying-index>
       </key>
-      <foreign-key id="37" parent="5" name="agpupils_agCourses_id_fk">
+      <foreign-key id="38" parent="5" name="agpupils_agCourses_id_fk">
         <columns>courseID</columns>
         <ref-key>~.agcourses.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="38" parent="5" name="agpupils_agtests_id_fk">
+      <foreign-key id="39" parent="5" name="agpupils_agtests_id_fk">
         <columns>testID</columns>
         <ref-key>~.agtests.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="39" parent="6" name="id">
+      <column id="40" parent="6" name="id">
         <mandatory>1</mandatory>
         <data-type>int(11)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="40" parent="6" name="ShortName">
+      <column id="41" parent="6" name="ShortName">
         <mandatory>1</mandatory>
         <data-type>varchar(100)|0</data-type>
       </column>
-      <column id="41" parent="6" name="Name">
+      <column id="42" parent="6" name="Name">
         <mandatory>1</mandatory>
         <data-type>varchar(200)|0</data-type>
       </column>
-      <column id="42" parent="6" name="Code">
+      <column id="43" parent="6" name="Code">
         <mandatory>1</mandatory>
         <data-type>varchar(10)|0</data-type>
       </column>
-      <column id="43" parent="6" name="GoogleSheetID">
+      <column id="44" parent="6" name="GoogleSheetID">
         <mandatory>1</mandatory>
         <data-type>varchar(50)|0</data-type>
       </column>
-      <index id="44" parent="6" name="agTests_Code_uindex">
+      <index id="45" parent="6" name="agTests_Code_uindex">
         <columns>Code</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <key id="45" parent="6" name="PRIMARY">
+      <key id="46" parent="6" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
-      <key id="46" parent="6" name="agTests_Code_uindex">
+      <key id="47" parent="6" name="agTests_Code_uindex">
         <columns>Code</columns>
         <underlying-index>agTests_Code_uindex</underlying-index>
       </key>

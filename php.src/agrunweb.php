@@ -28,7 +28,6 @@ function agHandleGetTestingJSON () {
         //return;
     }
 
-
     //запрошу информацию непосредственно с сайта ГУГЛ
     $url = 'https://script.google.com/macros/s/AKfycbxCQvc631SEAgPfjIukHwyGlT89IyL8XMb3UdODclQaAWpBjA/exec?docid=1bjsUfCOpTP7LOOQTpsZqqKwxIbZxkQu6lD386K68TRM';
     $result = file_get_contents($url);
@@ -39,11 +38,11 @@ function agHandleGetTestingJSON () {
     } else {
         agAnswerJSON(json_decode($result, true));
     }
-
 }
 
 function agHandleTic(){
-    $res = ['result'=>"OK"];
+    $res = initJSONReply();
+    $res['result'] = "OK";
     preventWebDefault();
     agAnswerJSON($res);
 }
@@ -51,6 +50,57 @@ function agHandleTic(){
 function agHandlePHPInfo(){
     preventWebDefault();
     phpinfo();
+}
+
+function agHandleLogout (){
+    preventWebDefault();
+    $res = initJSONReply();
+
+    $user = new Auth\User ();
+    $user->logout();
+
+    if ( session_id() ) {
+        // Если есть активная сессия, удаляем куки сессии,
+        setcookie(session_name(), session_id(), time()-60*60*24);
+        // и уничтожаем сессию
+        session_unset();
+        session_destroy();
+    }
+
+    $res['redirect'] = 'index.php';
+
+    agAnswerJSON($res);
+}
+
+function agHandleGetTOC (){
+    preventWebDefault();
+    $res = initJSONReply();
+
+    $aTOCJSON = readGoogleTOC ('1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw');
+    //$aTOCJSON = json_decode ($aTOCJSON);
+    //echo ($aTOCJSON);
+    $user = new Auth\User ();
+    if ($user->isAuthorized()) {
+        if (! $user->readFromDB()) {
+            $res['status'] = 'error';
+            $res['error'] = 'User authorized, but not in DB! Relogin, please!';
+        } else {
+            $tID = $user->getTestID();
+            $tst = readTests($tID);
+            $cID = $user->getCourseID();
+            $crs = readCourses($cID);
+            if ($crs) {
+                $aTOCJSON = $crs['TOCJSON'];
+                $aTOCJSONJS = json_decode($aTOCJSON);
+                $res['data'] = $aTOCJSONJS;
+            }
+        }
+    } else {
+        $res['status'] = 'error';
+        $res['error'] = 'User is not authorized! Relogin, please!';
+    }
+
+    agAnswerJSON($res);
 }
 
 function agHandleLogin(){
@@ -63,8 +113,8 @@ function agHandleLogin(){
         $user = new Auth\User ();
         $user->authorize($lgn,$pwd, true);
 
-        $json = array( 'status' => 'OK', 'redirect' => 'index.php'); // пoдгoтoвим мaссив oтвeтa
-
+        $json =  initJSONReply();
+        $json['redirect'] = 'index.php'; // пoдгoтoвим мaссив oтвeтa
 
         agAnswerJSON($json); // вывoдим мaссив oтвeтa
         //echo json_encode($json); // вывoдим мaссив oтвeтa

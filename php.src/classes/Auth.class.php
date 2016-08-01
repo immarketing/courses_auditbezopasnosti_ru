@@ -8,18 +8,21 @@ class User
     private $username;
     private $db;
     private $user_id;
+    private $user;
 
+    /*
     private $db_host = "localhost";
     private $db_name = "testdb";
     private $db_user = "testdb";
     private $db_pass = "testdb";
+    */
 
     private $is_authorized = false;
 
     public function __construct($username = null, $password = null)
     {
         $this->username = $username;
-        $this->connectDb($this->db_name, $this->db_user, $this->db_pass, $this->db_host);
+        //$this->connectDb($this->db_name, $this->db_user, $this->db_pass, $this->db_host);
     }
 
     public function __destruct()
@@ -36,41 +39,64 @@ class User
         return false;
     }
 
-    public function passwordHash($password, $salt = null, $iterations = 10)
-    {
-        $salt || $salt = uniqid();
-        $hash = md5(md5($password . md5(sha1($salt))));
+    public function readFromDB() {
+        try {
+            $db = connectDB();
+            $query = "select id,login,pwd1,courseID, testID from agpupils where
+            id = ? limit 1";
+            $sth = $db->prepare($query);
 
-        for ($i = 0; $i < $iterations; ++$i) {
-            $hash = md5(md5(sha1($hash)));
+            $sth->bind_param('s', $_SESSION["user_id"]);
+
+            $sth->execute( );
+
+            $result = $sth->get_result();
+
+            $this->user = $result->fetch_assoc();
+
+        } catch (Exception $e){
+            throw $e;
         }
-
-        return array('hash' => $hash, 'salt' => $salt);
-    }
-
-    public function getSalt($username) {
-        $query = "select salt from users where username = :username limit 1";
-        $sth = $this->db->prepare($query);
-        $sth->execute(
-            array(
-                ":username" => $username
-            )
-        );
-        $row = $sth->fetch();
-        if (!$row) {
+        if ($this->user) {
+            return true;
+        } else {
             return false;
         }
-        return $row["salt"];
     }
-
+    public function getCourseID (){
+        if ($this->user) {
+            return $this->user['courseID'];
+        } else {
+            return false;
+        }
+    }
+    public function getTestID (){
+        if ($this->user) {
+            return $this->user['testID'];
+        } else {
+            return false;
+        }
+    }
     public function authorize($username, $password, $remember=false)
     {
-    	if ($username === '111' && $password = '111') {
-    		//return true;
-    	} else {
-    		//return false;
-    	}
-    	
+        try {
+            $db = connectDB();
+            $query = "select id,login, pwd1 from agpupils where
+            login = ? and pwd1 = ? limit 1";
+            $sth = $db->prepare($query);
+
+            $sth->bind_param('ss', $username, $password );
+
+            $sth->execute( );
+
+            $result = $sth->get_result();
+
+            $this->user = $result->fetch_assoc();
+
+        } catch (Exception $e){
+
+        }
+
     	/*
         $query = "select id, username from users where
             username = :username and password = :password limit 1";
@@ -90,12 +116,13 @@ class User
         );
         $this->user = $sth->fetch();
         */
-        
-        if (! ($username === '111' && $password = '111') /*$this->user*/) {
+        if (! ($this->user )) {
             $this->is_authorized = false;
         } else {
+            /*
         	$this->user['id'] = '111';
         	$this->user['username'] = '111';
+            */
         	 
             $this->is_authorized = true;
             $this->user_id = $this->user['id'];
@@ -112,7 +139,7 @@ class User
         }
     }
 
-    public function saveSession($remember = true, $http_only = true, $days = 7)
+    private function saveSession($remember = true, $http_only = true, $days = 7)
     {
         $_SESSION["user_id"] = $this->user_id;
 
@@ -120,7 +147,7 @@ class User
             // Save session id in cookies
             $sid = session_id();
 
-            $expire = time() + $days * 24 * 3600;
+            $expire = time() + 1/24* 24 * 3600;
             $domain = ""; // default domain
             $secure = false;
             $path = "/";
@@ -130,7 +157,8 @@ class User
         }
     }
 
-    public function create($username, $password) {
+    /*
+    private function create($username, $password) {
         $user_exists = $this->getSalt($username);
 
         if ($user_exists) {
@@ -180,4 +208,31 @@ class User
 
         return $this;
     }
+    private function passwordHash($password, $salt = null, $iterations = 10)
+    {
+        $salt || $salt = uniqid();
+        $hash = md5(md5($password . md5(sha1($salt))));
+
+        for ($i = 0; $i < $iterations; ++$i) {
+            $hash = md5(md5(sha1($hash)));
+        }
+
+        return array('hash' => $hash, 'salt' => $salt);
+    }
+
+    public function getSalt($username) {
+        $query = "select salt from users where username = :username limit 1";
+        $sth = $this->db->prepare($query);
+        $sth->execute(
+            array(
+                ":username" => $username
+            )
+        );
+        $row = $sth->fetch();
+        if (!$row) {
+            return false;
+        }
+        return $row["salt"];
+    }
+    */
 }
