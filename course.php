@@ -58,7 +58,7 @@
             <a class="navbar-brand" href="#">НОУ ДОПК "Школа безопасности"</a> -->
         </div>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Выйти</a></li>
+            <li><a href="#" id="agLogout">Выйти</a></li>
         </ul>
     </div>
 </nav>
@@ -189,8 +189,16 @@
 <script src="./js/ie10-viewport-bug-workaround.js"></script>
 <script src="./js/courses.js"></script>
 
-<!-- Magnific Popup core JS file -->
+<script>
+    var pupilID = '';
+    var courseID = '';
+    var testID  = '';
+
+</script>
+
+<!-- Magnific Popup core JS file
 <script src="./js/jquery.magnific-popup.js"></script>
+-->
 
 </body>
 </html>

@@ -31,7 +31,7 @@ function transformDataToTOCTree(data) {
     for (i = 0 ; i<= indents.length-1;i++) {
         if (indents [i] > 0) {
             indentsKeys.push(i)
-        };
+        }
     }
 
     indentsKeys = indentsKeys.sort(function (a, b) {
@@ -179,6 +179,11 @@ function agClickAnswrsBtn(drctn ) {
     displayTesting();
 }
 
+function agClickDoneBtn() {
+    showModal('Вы хотите завершить тестирование?','Вы действительно хотите завершить тестирование? Результаты тестирования будут отправлены на сервер.',
+        [{text:'Завершить', action : function() {var a=1;}}]);
+}
+
 function agClickNextBtn() {
     agClickAnswrsBtn(1);
 }
@@ -232,15 +237,18 @@ function normalizeTestingData() {
 
     var tData = agTestingData.data;
 
+    //noinspection JSDuplicatedDeclaration
     for (var i = agTestingData.data.length -1; i >= 0 ; i--){
         var cQuest = agTestingData.data[i];
 
         if (""==cQuest.qText) {
             // надо удалить этот элемент из массива
             agTestingData.data.splice (i,1);
+            //noinspection UnnecessaryContinueJS
             continue;
         }
     }
+    //noinspection JSDuplicatedDeclaration
     for (var i = agTestingData.data.length -1; i >= 0 ; i--){
         agTestingData.data[i].noByOrder = i +1; // номер по порядку
     }
@@ -292,16 +300,31 @@ function setTOCTree() {
     var _ijt = getO['_ijt'];
     console.log('_ijt == [' + _ijt + ']');
 
-    $.getJSON('./php.src/gettoc.php' + (_ijt ? '?_ijt=' + _ijt : ''), function (data) {
+    //$.getJSON('./php.src/gettoc.php' + (_ijt ? '?_ijt=' + _ijt : ''), function (data) {
+    $.getJSON('./index.php?action=gettoc&' + (_ijt ? '_ijt=' + _ijt : ''), function (data) {
         var tree = [];
 
         //console.log('function(data)');
         //console.log(data);
 
-        tree = transformDataToTOCTree(data);
+        if ('OK' !== data['status']) {
+            log('Что-то пошло не так при получении строки TOC с сервера');
+            return ;
+        }
 
-        tree = [{ text: "ПТМ ДЛЯ РУКОВОДИТЕЛЕЙ, ОТВЕТСТВЕННЫХ  ЗА ПОЖАРНУЮ БЕЗОПАСНОСТЬ ОБЪЕКТОВ КУЛЬТУРЫ, ТЕАТРОВ, КИНОТЕАТРОВ, ЦИРКОВ, КЛУБОВ, БИБЛИОТЕК (Ф2)",
-            nodes : [{text:'ОБУЧЕНИЕ', nodes :tree, curHash: "" }, {text : 'ТЕСТИРОВАНИЕ', try2Test:""}]
+        tree = transformDataToTOCTree(data['data']);
+
+        var crsData = data['courseData'];
+
+        if (crsData) {
+            agTestingData['courseData'] = crsData;
+            agTestingData['courseDataLoaded'] = true;
+        }
+
+        tree = [{ text: crsData ['Name']
+            //"ПТМ ДЛЯ РУКОВОДИТЕЛЕЙ, ОТВЕТСТВЕННЫХ  ЗА ПОЖАРНУЮ БЕЗОПАСНОСТЬ ОБЪЕКТОВ КУЛЬТУРЫ, ТЕАТРОВ, КИНОТЕАТРОВ, ЦИРКОВ, КЛУБОВ, БИБЛИОТЕК (Ф2)"
+            ,
+            nodes : [{text:'МАТЕРИАЛЫ', nodes :tree, curHash: "" }, {text : 'ТЕСТИРОВАНИЕ', try2Test:""}]
         }];
 
         $('#agTOCTree').treeview({
@@ -349,7 +372,7 @@ function setTOCTree() {
             console.log("complete");
         });
 
-    return;
+
 }
 /*
 $( "div#agTOCTree li.node-agTOCTree" ).each(function( index ) {
@@ -359,6 +382,101 @@ $( "div#agTOCTree li.node-agTOCTree" ).each(function( index ) {
 });
 */
 
+function randN(n){  // [ 1 ] random numbers
+    return (Math.random()+'').slice(2, 2 + Math.max(1, Math.min(n, 15)) );
+}
+
+function showModal (header, body, buttons){
+    var dlgID = 'agDlgConfirmLogout'+randN(100);
+    var labelledby = 'agModalLabelConfLogout'+dlgID;
+
+    var dlgDiv = $('<div/>', {
+        id:     dlgID,
+        class:  'modal fade',
+        tabindex: "-1",
+        role: 'dialog',
+        'aria-labelledby' : labelledby
+    });
+
+    var dlgDivDialog = $('<div/>', {
+        class:  'modal-dialog modal-sm',
+        role: 'document'
+    });
+    dlgDiv.append(dlgDivDialog);
+    var dlgDivDialogModalContent = $('<div/>', {
+        class:  'modal-content'
+    });
+    dlgDivDialog.append(dlgDivDialogModalContent);
+    // <div class="modal-header">
+    var dlgDivDialogModalContentHeader = $('<div/>', {
+        class:  'modal-header'
+    });
+    var dlgDivDialogModalContentHeaderCls = $('<button/>', {type : "button", class : "close", 'data-dismiss':"modal", 'aria-label':"Закрыть"});
+    $('<i/>', {'class' : "fa fa-times", 'aria-hidden' : "true"}).appendTo(dlgDivDialogModalContentHeaderCls);
+    dlgDivDialogModalContentHeader.append(dlgDivDialogModalContentHeaderCls);
+    $('<h4/>', {'class' : "modal-title", 'id' : labelledby, text : header }).appendTo(dlgDivDialogModalContentHeader);
+
+    //modal-body
+    var dlgDivDialogModalContentBody = $('<div/>', {
+        class:  'modal-body'
+        ,text: body
+    });
+    // modal-footer
+    var dlgDivDialogModalContentFooter = $('<div/>', {
+        class:  'modal-footer'
+    });
+    $('<button/>', {'class' : "btn btn-default", 'type' : "button", 'data-dismiss':"modal", text: 'Отмена'}).appendTo(dlgDivDialogModalContentFooter);
+    dlgDivDialogModalContent.append(dlgDivDialogModalContentHeader);
+    dlgDivDialogModalContent.append(dlgDivDialogModalContentBody);
+    dlgDivDialogModalContent.append(dlgDivDialogModalContentFooter);
+
+    buttons.forEach(function(item, i, arr) {
+        //alert( i + ": " + item + " (массив:" + arr + ")" );
+        $('<button/>', {'class' : "btn btn-primary", 'data-dismiss':"modal", 'type' : "button", text: item['text'],
+            on : {click : function (event){item['action']();}}
+        }).appendTo(dlgDivDialogModalContentFooter);
+    });
+
+    $( "body" ).append (dlgDiv);
+    dlgDiv.modal({});
+}
+
+function handlelogout(e) {
+    data = {'action':'logout'};
+    $.ajax({ // инициaлизируeм ajax зaпрoс
+        type: 'POST', // oтпрaвляeм в POST фoрмaтe, мoжнo GET
+        url: 'index.php?action=logout', // путь дo oбрaбoтчикa, у нaс oн лeжит в тoй жe пaпкe
+        dataType: 'json', // oтвeт ждeм в json фoрмaтe
+        data: data, // дaнныe для oтпрaвки
+        beforeSend: function (data) { // сoбытиe дo oтпрaвки
+            //form.find('input[type="submit"]').attr('disabled', 'disabled'); // нaпримeр, oтключим кнoпку, чтoбы нe жaли пo 100 рaз
+        },
+        success: function (data) { // сoбытиe пoслe удaчнoгo oбрaщeния к сeрвeру и пoлучeния oтвeтa
+            if (data['error']) { // eсли oбрaбoтчик вeрнул oшибку
+                // alert(data['error']); // пoкaжeм eё тeкст
+                log (data['error']);
+            } else { // eсли всe прoшлo oк
+                //alert('Письмo oтврaвлeнo! Чeкaйтe пoчту! =)'); // пишeм чтo всe oк
+                rdr = data['redirect'];
+                if (rdr) {
+                    window.open(rdr, '_top','');
+                }
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) { // в случae нeудaчнoгo зaвeршeния зaпрoсa к сeрвeру
+            log (xhr.status);
+            log (thrownError);
+            alert("При получении данных с сервера возникла ошибка. Пожалуйста, нажмите ссылку 'Выход' и войдите снова.");
+            //alert(xhr.status); // пoкaжeм oтвeт сeрвeрa
+            //alert(thrownError); // и тeкст oшибки
+        },
+        complete: function (data) { // сoбытиe пoслe любoгo исхoдa
+            //form.find('input[type="submit"]').prop('disabled', false); // в любoм случae включим кнoпку oбрaтнo
+        }
+
+    });
+}
+
 $(document).ready(function () {
     setTOCTree();
     loadTestingJSON();
@@ -366,72 +484,23 @@ $(document).ready(function () {
     showLearningPanel();
     showTestingPanel();
 
-    $('.agImagePopup').magnificPopup({
-        type: 'image'
-        // other options
-    });
+    $('.navbar #agLogout').on( 'click', function (event) {
+        //$('#agDlgConfirmLogout').modal({});
 
-    $('body').each(function () {
-        var $spy = $(this).scrollspy('refresh')
-    });
-
-
-    /*
-    $(window).scroll(function (eo) {
-        //$( "span" ).css( "display", "inline" ).fadeOut( "slow" );
-        //console.log("scroll(function(" + eo);
-
-        if ($(document).scrollTop() > $("#about").offset().top - 30) {
-            $("a.navbar-brand").show(400);
-            //$("a.navbar-brand").removeClass("ag-no-display animated slideOutUp");
-            //$("a.navbar-brand").addClass('ag-display animated slideInUp');
-        } else {
-            $("a.navbar-brand").hide(400);
-            //$("a.navbar-brand").removeClass("animated slideInUp");
-            //$("a.navbar-brand").addClass('animated slideOutDown');
-
+        showModal('Подтвердите выход!',
+            'Вы подтверждаете выход из процесса обучения? Сессия будет завершена и вам придется проходить все заново?',
+            [{text:'ОК', action : function (){
+                handlelogout (event);
+            } }]);
         }
-    });
-    */
-
-    // Add smooth scrolling to all links in navbar + footer link
-    $(".navbar a, footer a[href='#myPage']").on('click', function (event) {
-
-        // Prevent default anchor click behavior
-        event.preventDefault();
-
-        // Store hash
-        var hash = this.hash;
-
-        // Using jQuery's animate() method to add smooth page scroll
-        // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
-        $('html, body').animate({
-            scrollTop: $(hash).offset().top
-        }, 400, function () {
-
-            // Add hash (#) to URL when done scrolling (default click behavior)
-            window.location.hash = hash;
-        });
-    });
+    );
 
     /*
-
      $('body>div.container.ag-slideUp').addClass("ag-hidden").viewportChecker({
      classToAdd: 'ag-visible animated fadeIn-- flipInX-- slideInUp',
      offset: 150
      });
      */
-
-    $(".navbar").on("activate.bs.scrollspy", function () {
-        //var x = $(".nav li.active > a");
-        //$("#demo").empty().html("You are currently viewing: " + x);
-        //console.log(x.text());
-        //console.log(x.length);
-
-        //$("a.navbar-brand").css("display", "block");
-        //$("a.navbar-brand").css("visibility", "visible");
-        //$("a.navbar-brand").show(800);
-    });
 });
 
 var agTICResult = {};

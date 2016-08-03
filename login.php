@@ -59,11 +59,11 @@
 
     <!--
 
-    <input type="hidden" name="XDEBUG_SESSION_START" value="<?php echo $_REQUEST['XDEBUG_SESSION_START'];?>">
-    <input type="hidden" name="KEY" value="<?php echo $_REQUEST['KEY'];?>">
+    <input type="hidden" name="XDEBUG_SESSION_START" value="<?php echo $_REQUEST['XDEBUG_SESSION_START']; ?>">
+    <input type="hidden" name="KEY" value="<?php echo $_REQUEST['KEY']; ?>">
     -->
 
-    <div class="alert alert-info" >
+    <div class="alert alert-info">
         <p>
             Нет данных для входа? <a href="http://www.sfts.ru" target="_blank">Заключите договор на обучение.</a>
 
@@ -71,9 +71,20 @@
 
     <div class="g-recaptcha" data-sitekey="6LcnDSYTAAAAAAddH-u5a0-secthUO8VJUYYHWF2"></div>
 
-    <button class="btn btn-large btn-primary" type1="submit1" >Вход</button>
+    <button class="btn btn-large btn-primary" type1="submit1">Вход</button>
 </form>
 
+<div id="agFooter">
+    <div class="container-fluid ">
+        <div class="col-xs-1"></div>
+
+        <div class="col-xs-10 alert alert-danger text-center text-uppercase">
+            <strong>Внимание!</strong> Сайт предназначен для мониторов с разрешенем не менее 1024 по горизонтали. Также
+            требуется поддержка файлов COOKIE.
+        </div>
+        <div class="col-xs-1"></div>
+    </div>
+</div>
 
 <script src="./js/jquery.js"></script>
 <script src="./js/bootstrap.js"></script>
