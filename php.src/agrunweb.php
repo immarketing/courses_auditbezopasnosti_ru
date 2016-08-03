@@ -87,9 +87,17 @@ function agHandleGetTOC (){
         } else {
             $tID = $user->getTestID();
             $tst = readTests($tID);
+            if ($tst) {
+                $res['testData'] = $tst;
+                //$aTOCJSON = $crs['TOCJSON'];
+                //$aTOCJSONJS = json_decode($aTOCJSON);
+                //$res['data'] = $aTOCJSONJS;
+            }
+
             $cID = $user->getCourseID();
             $crs = readCourses($cID);
             if ($crs) {
+                $res['courseData'] = $crs;
                 $aTOCJSON = $crs['TOCJSON'];
                 $aTOCJSONJS = json_decode($aTOCJSON);
                 $res['data'] = $aTOCJSONJS;

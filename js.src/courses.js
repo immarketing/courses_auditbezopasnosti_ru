@@ -314,8 +314,17 @@ function setTOCTree() {
 
         tree = transformDataToTOCTree(data['data']);
 
-        tree = [{ text: "ПТМ ДЛЯ РУКОВОДИТЕЛЕЙ, ОТВЕТСТВЕННЫХ  ЗА ПОЖАРНУЮ БЕЗОПАСНОСТЬ ОБЪЕКТОВ КУЛЬТУРЫ, ТЕАТРОВ, КИНОТЕАТРОВ, ЦИРКОВ, КЛУБОВ, БИБЛИОТЕК (Ф2)",
-            nodes : [{text:'ОБУЧЕНИЕ', nodes :tree, curHash: "" }, {text : 'ТЕСТИРОВАНИЕ', try2Test:""}]
+        var crsData = data['courseData'];
+
+        if (crsData) {
+            agTestingData['courseData'] = crsData;
+            agTestingData['courseDataLoaded'] = true;
+        }
+
+        tree = [{ text: crsData ['Name']
+            //"ПТМ ДЛЯ РУКОВОДИТЕЛЕЙ, ОТВЕТСТВЕННЫХ  ЗА ПОЖАРНУЮ БЕЗОПАСНОСТЬ ОБЪЕКТОВ КУЛЬТУРЫ, ТЕАТРОВ, КИНОТЕАТРОВ, ЦИРКОВ, КЛУБОВ, БИБЛИОТЕК (Ф2)"
+            ,
+            nodes : [{text:'МАТЕРИАЛЫ', nodes :tree, curHash: "" }, {text : 'ТЕСТИРОВАНИЕ', try2Test:""}]
         }];
 
         $('#agTOCTree').treeview({
@@ -444,7 +453,8 @@ function handlelogout(e) {
         },
         success: function (data) { // сoбытиe пoслe удaчнoгo oбрaщeния к сeрвeру и пoлучeния oтвeтa
             if (data['error']) { // eсли oбрaбoтчик вeрнул oшибку
-                alert(data['error']); // пoкaжeм eё тeкст
+                // alert(data['error']); // пoкaжeм eё тeкст
+                log (data['error']);
             } else { // eсли всe прoшлo oк
                 //alert('Письмo oтврaвлeнo! Чeкaйтe пoчту! =)'); // пишeм чтo всe oк
                 rdr = data['redirect'];
@@ -454,8 +464,11 @@ function handlelogout(e) {
             }
         },
         error: function (xhr, ajaxOptions, thrownError) { // в случae нeудaчнoгo зaвeршeния зaпрoсa к сeрвeру
-            alert(xhr.status); // пoкaжeм oтвeт сeрвeрa
-            alert(thrownError); // и тeкст oшибки
+            log (xhr.status);
+            log (thrownError);
+            alert("При получении данных с сервера возникла ошибка. Пожалуйста, нажмите ссылку 'Выход' и войдите снова.");
+            //alert(xhr.status); // пoкaжeм oтвeт сeрвeрa
+            //alert(thrownError); // и тeкст oшибки
         },
         complete: function (data) { // сoбытиe пoслe любoгo исхoдa
             //form.find('input[type="submit"]').prop('disabled', false); // в любoм случae включим кнoпку oбрaтнo
@@ -471,33 +484,6 @@ $(document).ready(function () {
     showLearningPanel();
     showTestingPanel();
 
-    $('.agImagePopup').magnificPopup({
-        type: 'image'
-        // other options
-    });
-
-    $('body').each(function () {
-        var $spy = $(this).scrollspy('refresh')
-    });
-
-
-    /*
-    $(window).scroll(function (eo) {
-        //$( "span" ).css( "display", "inline" ).fadeOut( "slow" );
-        //console.log("scroll(function(" + eo);
-
-        if ($(document).scrollTop() > $("#about").offset().top - 30) {
-            $("a.navbar-brand").show(400);
-            //$("a.navbar-brand").removeClass("ag-no-display animated slideOutUp");
-            //$("a.navbar-brand").addClass('ag-display animated slideInUp');
-        } else {
-            $("a.navbar-brand").hide(400);
-            //$("a.navbar-brand").removeClass("animated slideInUp");
-            //$("a.navbar-brand").addClass('animated slideOutDown');
-
-        }
-    });
-    */
     $('.navbar #agLogout').on( 'click', function (event) {
         //$('#agDlgConfirmLogout').modal({});
 
@@ -509,44 +495,12 @@ $(document).ready(function () {
         }
     );
 
-    // Add smooth scrolling to all links in navbar + footer link
-    $(".navbar a, footer a[href='#myPage']").on('click', function (event) {
-
-        // Prevent default anchor click behavior
-        event.preventDefault();
-
-        // Store hash
-        var hash = this.hash;
-
-        // Using jQuery's animate() method to add smooth page scroll
-        // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
-        $('html, body').animate({
-            scrollTop: $(hash).offset().top
-        }, 400, function () {
-
-            // Add hash (#) to URL when done scrolling (default click behavior)
-            window.location.hash = hash;
-        });
-    });
-
     /*
-
      $('body>div.container.ag-slideUp').addClass("ag-hidden").viewportChecker({
      classToAdd: 'ag-visible animated fadeIn-- flipInX-- slideInUp',
      offset: 150
      });
      */
-
-    $(".navbar").on("activate.bs.scrollspy", function () {
-        //var x = $(".nav li.active > a");
-        //$("#demo").empty().html("You are currently viewing: " + x);
-        //console.log(x.text());
-        //console.log(x.length);
-
-        //$("a.navbar-brand").css("display", "block");
-        //$("a.navbar-brand").css("visibility", "visible");
-        //$("a.navbar-brand").show(800);
-    });
 });
 
 var agTICResult = {};
