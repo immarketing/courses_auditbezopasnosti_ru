@@ -315,10 +315,15 @@ function setTOCTree() {
         tree = transformDataToTOCTree(data['data']);
 
         var crsData = data['courseData'];
-
         if (crsData) {
             agTestingData['courseData'] = crsData;
             agTestingData['courseDataLoaded'] = true;
+        }
+
+        var tstData = data['testData'];
+        if (tstData) {
+            agTestingData['testData'] = tstData;
+            agTestingData['testDataLoaded'] = true;
         }
 
         tree = [{ text: crsData ['Name']
