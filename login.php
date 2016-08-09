@@ -22,6 +22,14 @@
 
     <title>НОУ ДОПК "Школа безопасности". Форма подключения</title>
 
+    <script type="text/javascript">
+        var onloadCallback = function() {
+            grecaptcha.render('ag-recaptcha', {
+                'sitekey' : '6LcnDSYTAAAAAAddH-u5a0-secthUO8VJUYYHWF2'
+            });
+        };
+    </script>
+
     <link rel="icon" type="image/png" href="/images/favicon-nrm.png"/>
 
     <!-- Bootstrap core CSS включен теперь в мой ЦСС - компилируется из бутстрапа -->
@@ -37,8 +45,9 @@
     <link rel="stylesheet" type="text/css" href="./css/animate.css"/>
     <link href="./css/font-awesome.css" rel="stylesheet">
 
+    <!--
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
+    -->
 </head>
 <body>
 
@@ -69,7 +78,13 @@
 
     </div>
 
+    <!--
     <div class="g-recaptcha" data-sitekey="6LcnDSYTAAAAAAddH-u5a0-secthUO8VJUYYHWF2"></div>
+    id="html_element"
+    -->
+
+    <div class="g-recaptcha" id="ag-recaptcha"></div>
+
 
     <button class="btn btn-large btn-primary" type1="submit1">Вход</button>
 </form>
@@ -90,7 +105,12 @@
 <script src="./js/bootstrap.js"></script>
 <script src="./js/ie10-viewport-bug-workaround.js"></script>
 
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+</script>
+
 <script src="./js/login.js"></script>
+
 
 </body>
 </html>

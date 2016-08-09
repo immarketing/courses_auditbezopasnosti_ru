@@ -269,6 +269,7 @@ function loadTestingJSON (){
     }
     var getO = parseQueryString(location.search);
     var _ijt = getO['_ijt'];
+    // todo необходимо получить с сервера соответствующий тест.
     $.getJSON('./index.php?action=gettestingjson&' + (_ijt ? '_ijt=' + _ijt : ''), function (data) {
         console.log("loadTestingJSON() success");
         console.log(data);
@@ -308,7 +309,7 @@ function setTOCTree() {
         //console.log(data);
 
         if ('OK' !== data['status']) {
-            log('Что-то пошло не так при получении строки TOC с сервера');
+            console.log('Что-то пошло не так при получении строки TOC с сервера');
             return ;
         }
 
@@ -345,8 +346,12 @@ function setTOCTree() {
             console.log(data);
 
             if ('curHash' in data) {
-                window.open('https://docs.google.com/document/d/1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw/pub?embedded=true#'+(data.curHash ? data.curHash : ""), 'agContentFrame','');
-                showLearningPanel();
+                if (agTestingData['courseDataLoaded']) {
+                    gDocID = agTestingData['courseData']['googleDocID'];
+                    window.open('https://docs.google.com/document/d/'+gDocID+'/pub?embedded=true#'+(data.curHash ? data.curHash : ""), 'agContentFrame','');
+                    showLearningPanel();
+                }
+                //window.open('https://docs.google.com/document/d/1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw/pub?embedded=true#'+(data.curHash ? data.curHash : ""), 'agContentFrame','');
                 sendTic();
             }
 
@@ -459,7 +464,7 @@ function handlelogout(e) {
         success: function (data) { // сoбытиe пoслe удaчнoгo oбрaщeния к сeрвeру и пoлучeния oтвeтa
             if (data['error']) { // eсли oбрaбoтчик вeрнул oшибку
                 // alert(data['error']); // пoкaжeм eё тeкст
-                log (data['error']);
+                console.log (data['error']);
             } else { // eсли всe прoшлo oк
                 //alert('Письмo oтврaвлeнo! Чeкaйтe пoчту! =)'); // пишeм чтo всe oк
                 rdr = data['redirect'];
@@ -469,8 +474,8 @@ function handlelogout(e) {
             }
         },
         error: function (xhr, ajaxOptions, thrownError) { // в случae нeудaчнoгo зaвeршeния зaпрoсa к сeрвeру
-            log (xhr.status);
-            log (thrownError);
+            console.log (xhr.status);
+            console.log (thrownError);
             alert("При получении данных с сервера возникла ошибка. Пожалуйста, нажмите ссылку 'Выход' и войдите снова.");
             //alert(xhr.status); // пoкaжeм oтвeт сeрвeрa
             //alert(thrownError); // и тeкст oшибки

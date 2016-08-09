@@ -20,12 +20,42 @@ function agAnswerJSON ($toSend){
     echo ( json_encode ($toSend));
 }
 
-function initJSONReply () {
+// to.do что-то надо сделать, и сделать быстро
+function initJSONReplyOK () {
     $rpl = [
-        'status'=>"OK"
-        , ''
+        //'status'=>"OK"
+        //, ''
     ];
+    setJSONReplyOK($rpl);
     return $rpl;
+}
+
+function setJSONReplyError (&$jsn, $errMsg = '', $errDesc = '') {
+    $jsn['status']="error";
+    $jsn['error']=$errMsg;
+    $jsn['errorDesc']=$errDesc;
+}
+
+function setJSONReplyOK (&$jsn) {
+    $jsn['status']="OK";
+}
+
+function setJSONReplyRedirect (&$jsn, $rdr) {
+    $jsn['redirect']=$rdr;
+}
+
+function initJSONReplyError () {
+    $rpl = [
+        //'status'=>"error"
+        //, ''
+    ];
+    setJSONReplyError($rpl);
+    return $rpl;
+}
+
+// to.do надо просмотреть все использования и в тех, в которых устанавливается ошибка, переделать на процедуру
+function initJSONReply ($isError = false) {
+    return (!$isError?initJSONReplyOK():initJSONReplyError());
 }
 
 function readTests ($id) {
