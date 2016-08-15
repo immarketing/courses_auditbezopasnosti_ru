@@ -110,8 +110,9 @@ function sendTic(){
     $.getJSON('./index.php?action=tic&' + (_ijt ? '_ijt=' + _ijt : ''), function (data) {
         console.log("sendTic() success");
         console.log(data);
-        agTICResult = data;
+        window.agTICResult = data;
         console.log(agTICResult);
+        console.log(window.agTICResult);
     }).done(function () {
         console.log("sendTic() second success");
     })
@@ -357,7 +358,7 @@ function setTOCTree() {
 
             if ('try2Test' in data) {
                 console.log(data);
-                if (('result' in window.agTICResult) && ("OK"===window.agTICResult.result)) {
+                if (('status' in window.agTICResult) && ("OK"===window.agTICResult.status)) {
                     // все должно быть ОК
                     console.log('RESULT === OK');
                     showTestingPanel();
