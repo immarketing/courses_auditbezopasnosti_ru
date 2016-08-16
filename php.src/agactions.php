@@ -25,6 +25,7 @@ function agGetActionsList ($isConsole = false){
         , AG_AN_LOGIN => 'agHandleLogin' // обрабатываем попытку входа
         , AG_AN_LOGOUT => 'agHandleLogout' // обрабатываем ссылку выхода
         , AG_AN_GETTOC => 'agHandleGetTOC' // обрабатываем ссылку выхода
+        , AG_AN_SAVEANSWERS => 'agHandleSaveAnswers' // обрабатываем ссылку выхода
     ];
 
     if ($isConsole) {

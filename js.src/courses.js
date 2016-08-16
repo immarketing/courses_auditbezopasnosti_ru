@@ -22,20 +22,20 @@ function transformDataToTOCTree(data) {
     $.each(data, function (key, val) {
         //items.push('<li id="' + key + '">' + val + '</li>');
         //tree.push({'text': val.text});
-        indents[0+val.indentStart] = 1;
+        indents[0 + val.indentStart] = 1;
     });
 
     // сортируем ключи (уровни доступов) их по возрастанию
     var indentsKeys = [];
 
-    for (i = 0 ; i<= indents.length-1;i++) {
+    for (i = 0; i <= indents.length - 1; i++) {
         if (indents [i] > 0) {
             indentsKeys.push(i)
         }
     }
 
     indentsKeys = indentsKeys.sort(function (a, b) {
-        return 0+a - b;
+        return 0 + a - b;
     });
 
     // соотносим имеющиеся уровни доступов с их уровнями, начиная с 1
@@ -47,30 +47,30 @@ function transformDataToTOCTree(data) {
     });
 
     // рабочий массив
-    var workArr = [[],[],[],[],[],[]]; // предполагаем максимальное кол-во уровней в 6
+    var workArr = [[], [], [], [], [], []]; // предполагаем максимальное кол-во уровней в 6
 
     var i = 0;
     // "linkUrl":"#heading=h.1nyf8737emu2"
-    for (i = 0; i <= data.length-1; i++ ){
-        var curIndent = 0+data[i].indentStart;
-        var curLevel = 0+indents[curIndent];
-        var curText = ""+ data[i].text;
-        var curLinkUrl = ""+ data[i].linkUrl;
+    for (i = 0; i <= data.length - 1; i++) {
+        var curIndent = 0 + data[i].indentStart;
+        var curLevel = 0 + indents[curIndent];
+        var curText = "" + data[i].text;
+        var curLinkUrl = "" + data[i].linkUrl;
         var curUrl = curLinkUrl;
-        curUrl = (""+curUrl).replace( /.*=/, "");
+        curUrl = ("" + curUrl).replace(/.*=/, "");
 
-        workArr[curLevel-1].push({text : curText, curHash :  curUrl});
+        workArr[curLevel - 1].push({text: curText, curHash: curUrl});
 
         var nextIndent = 0;
         var nextLevel = 0;
 
-        if ( i == data.length-1) {
+        if (i == data.length - 1) {
             //continue;
             nextLevel = 1;
             nextIndent = indentsKeys[0];
         } else {
-            nextIndent = 0+data[i+1].indentStart;
-            nextLevel = 0+indents[nextIndent];
+            nextIndent = 0 + data[i + 1].indentStart;
+            nextLevel = 0 + indents[nextIndent];
         }
 
 
@@ -81,18 +81,18 @@ function transformDataToTOCTree(data) {
             // добавляем текущий уровень
             //workArr[curLevel-1].push({text : curText});
             var j = 0;
-            for (j = curLevel+1; j <= nextLevel-1; j++) {
-                workArr[j-1].push({text : "?????"});
+            for (j = curLevel + 1; j <= nextLevel - 1; j++) {
+                workArr[j - 1].push({text: "?????"});
             }
         } else {
             // текущий уровень больше следующего. Надо закрывать.
             //workArr[curLevel-1].push({text : curText});
             var j = 0;
-            for (j = curLevel; j >= nextLevel+1; j--) {
-                var curArr = workArr[j-2].pop();
-                curArr.nodes = workArr[j-1];
-                workArr[j-2].push(curArr);
-                workArr[j-1] = [];
+            for (j = curLevel; j >= nextLevel + 1; j--) {
+                var curArr = workArr[j - 2].pop();
+                curArr.nodes = workArr[j - 1];
+                workArr[j - 2].push(curArr);
+                workArr[j - 1] = [];
                 //workArr[j-1].push({text : "?????"});
             }
         }
@@ -103,7 +103,7 @@ function transformDataToTOCTree(data) {
     return result;
 }
 
-function sendTic(){
+function sendTic() {
     var getO = parseQueryString(location.search);
     var _ijt = getO['_ijt'];
 
@@ -125,13 +125,13 @@ function sendTic(){
         });
 }
 
-function showLearningPanel () {
+function showLearningPanel() {
     $("div#agLearning").removeClass('agDisplayNone');
     $("div#agTesting").addClass('agDisplayNone');
 
 }
 
-function showTestingPanel (){
+function showTestingPanel() {
     loadTestingJSON();
     $("div#agTesting").removeClass('agDisplayNone');
     $("div#agLearning").addClass('agDisplayNone');
@@ -141,7 +141,7 @@ function agClickPrevBtn() {
     agClickAnswrsBtn(-1);
 }
 
-function agStoreQuestion (){
+function agStoreQuestion() {
     $("#agTestingAnswrOpt1").text("" + (agTestingData.data[agTestingData.curQuestion].qAns1));
     $("#agTestingAnswrOpt2").text("" + (agTestingData.data[agTestingData.curQuestion].qAns2));
     $("#agTestingAnswrOpt3").text("" + (agTestingData.data[agTestingData.curQuestion].qAns3));
@@ -149,19 +149,38 @@ function agStoreQuestion (){
     $("#agTestingAnswrOpt5").text("" + (agTestingData.data[agTestingData.curQuestion].qAns5));
     $("#agTestingAnswrOpt6").text("" + (agTestingData.data[agTestingData.curQuestion].qAns6));
 
-    if ($("#agTestingAnswrRdo1").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=1}
-    if ($("#agTestingAnswrRdo2").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=2}
-    if ($("#agTestingAnswrRdo3").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=3}
-    if ($("#agTestingAnswrRdo4").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=4}
-    if ($("#agTestingAnswrRdo5").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=5}
-    if ($("#agTestingAnswrRdo6").prop("checked") ) {agTestingData.data[agTestingData.curQuestion].answrNo=6}
+    agTestingData.answData[agTestingData.curQuestion].UID = agTestingData.data[agTestingData.curQuestion].UID;
+    if ($("#agTestingAnswrRdo1").prop("checked")) {
+        agTestingData.data[agTestingData.curQuestion].answrNo = 1;
+        agTestingData.answData[agTestingData.curQuestion].answrNo = 1;
+    }
+    if ($("#agTestingAnswrRdo2").prop("checked")) {
+        agTestingData.data[agTestingData.curQuestion].answrNo = 2;
+        agTestingData.answData[agTestingData.curQuestion].answrNo = 2;
+    }
+    if ($("#agTestingAnswrRdo3").prop("checked")) {
+        agTestingData.data[agTestingData.curQuestion].answrNo = 3;
+        agTestingData.answData[agTestingData.curQuestion].answrNo = 3;
+    }
+    if ($("#agTestingAnswrRdo4").prop("checked")) {
+        agTestingData.data[agTestingData.curQuestion].answrNo = 4;
+        agTestingData.answData[agTestingData.curQuestion].answrNo = 4;
+    }
+    if ($("#agTestingAnswrRdo5").prop("checked")) {
+        agTestingData.data[agTestingData.curQuestion].answrNo = 5;
+        agTestingData.answData[agTestingData.curQuestion].answrNo = 5;
+    }
+    if ($("#agTestingAnswrRdo6").prop("checked")) {
+        agTestingData.data[agTestingData.curQuestion].answrNo = 6;
+        agTestingData.answData[agTestingData.curQuestion].answrNo = 6;
+    }
 
 }
 
 
-function agClickAnswrsBtn(drctn ) {
+function agClickAnswrsBtn(drctn) {
     if (drctn > 0) {
-        if (agTestingData.curQuestion == (agTestingData.data.length-1)) {
+        if (agTestingData.curQuestion == (agTestingData.data.length - 1)) {
             return;
         }
     } else if (drctn < 0) {
@@ -172,24 +191,74 @@ function agClickAnswrsBtn(drctn ) {
         return;
     }
 
-    var element = $( this );
-    console.log(element);
+    var element = $(this);
+    //console.log(element);
 
     agStoreQuestion();
-    agTestingData.curQuestion += (drctn<0?-1:1);
+    agTestingData.curQuestion += (drctn < 0 ? -1 : 1);
     displayTesting();
 }
 
 function agClickDoneBtn() {
-    showModal('Вы хотите завершить тестирование?','Вы действительно хотите завершить тестирование? Результаты тестирования будут отправлены на сервер.',
-        [{text:'Завершить', action : function() {var a=1;}}]);
+    showModal('Вы хотите завершить тестирование?', 'Вы действительно хотите завершить тестирование? Результаты тестирования будут отправлены на сервер.',
+        [{
+            text: 'Завершить', action: function () {
+                var a = 1;
+
+                var answrJSON = {
+                    'answrData' : agTestingData.answData,
+                    'testID'    : agTestingData.testData.id
+                };
+
+                for (i = 0; i <= agTestingData.answData.length - 1; i++) {
+                    answrJSON['_q'+(i<=9?'0':'')+i+'UID'] = agTestingData.answData[i].UID;
+                    answrJSON['_q'+(i<=9?'0':'')+i+'ansno'] = agTestingData.answData[i].answrNo;
+                }
+                /*
+                var answrs = agTestingData.answData;
+                var testID = agTestingData.testData.id;
+                */
+                var getO = parseQueryString(location.search);
+                var _ijt = getO['_ijt'];
+
+                $.ajax({ // инициaлизируeм ajax зaпрoс
+                    type: 'POST', // oтпрaвляeм в POST фoрмaтe, мoжнo GET
+                    url: 'index.php?action=saveanswers&_ijt='+_ijt, // путь дo oбрaбoтчикa, у нaс oн лeжит в тoй жe пaпкe
+                    dataType: 'json', // oтвeт ждeм в json фoрмaтe
+                    data: answrJSON, // дaнныe для oтпрaвки
+                    beforeSend: function (data) { // сoбытиe дo oтпрaвки
+                        //form.find('input[type="submit"]').attr('disabled', 'disabled'); // нaпримeр, oтключим кнoпку, чтoбы нe жaли пo 100 рaз
+                    },
+                    success: function (data) { // сoбытиe пoслe удaчнoгo oбрaщeния к сeрвeру и пoлучeния oтвeтa
+                        if (data['error']) { // eсли oбрaбoтчик вeрнул oшибку
+                            // alert(data['error']); // пoкaжeм eё тeкст
+                            console.log(data['error']);
+                        } else { // eсли всe прoшлo oк
+                            console.log(data);
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) { // в случae нeудaчнoгo зaвeршeния зaпрoсa к сeрвeру
+                        console.log(xhr.status);
+                        console.log(thrownError);
+                        //alert("При получении данных с сервера возникла ошибка. Пожалуйста, нажмите ссылку 'Выход' и войдите снова.");
+                        //alert(xhr.status); // пoкaжeм oтвeт сeрвeрa
+                        //alert(thrownError); // и тeкст oшибки
+                    },
+                    complete: function (data) { // сoбытиe пoслe любoгo исхoдa
+                        //form.find('input[type="submit"]').prop('disabled', false); // в любoм случae включим кнoпку oбрaтнo
+                    }
+
+                });
+
+            }
+        }]);
 }
 
 function agClickNextBtn() {
     agClickAnswrsBtn(1);
 }
 
-function displayTesting (){
+function displayTesting() {
     // показываем тестирование на экране
     var aQuestion = agTestingData.data[agTestingData.curQuestion];
 
@@ -201,7 +270,7 @@ function displayTesting (){
     }
 
     // agTestingAnswrBtnsNext
-    if (agTestingData.curQuestion == (agTestingData.data.length-1)) {
+    if (agTestingData.curQuestion == (agTestingData.data.length - 1)) {
         $("#agTestingAnswrBtnsNext").addClass('disabled');
     } else {
         $("#agTestingAnswrBtnsNext").removeClass('disabled');
@@ -215,48 +284,51 @@ function displayTesting (){
 
     // agTestingAnswrOpt1
     $("#agTestingAnswrOpt1").text("" + (agTestingData.data[agTestingData.curQuestion].qAns1));
-    $("#agTestingAnswrRdo1").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 1));
+    $("#agTestingAnswrRdo1").prop('checked', (agTestingData.data[agTestingData.curQuestion].answrNo == 1));
     $("#agTestingAnswrOpt2").text("" + (agTestingData.data[agTestingData.curQuestion].qAns2));
-    $("#agTestingAnswrRdo2").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 2));
+    $("#agTestingAnswrRdo2").prop('checked', (agTestingData.data[agTestingData.curQuestion].answrNo == 2));
     $("#agTestingAnswrOpt3").text("" + (agTestingData.data[agTestingData.curQuestion].qAns3));
-    $("#agTestingAnswrRdo3").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 3));
+    $("#agTestingAnswrRdo3").prop('checked', (agTestingData.data[agTestingData.curQuestion].answrNo == 3));
     $("#agTestingAnswrOpt4").text("" + (agTestingData.data[agTestingData.curQuestion].qAns4));
-    $("#agTestingAnswrRdo4").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 4));
+    $("#agTestingAnswrRdo4").prop('checked', (agTestingData.data[agTestingData.curQuestion].answrNo == 4));
     $("#agTestingAnswrOpt5").text("" + (agTestingData.data[agTestingData.curQuestion].qAns5));
-    $("#agTestingAnswrRdo5").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 5));
+    $("#agTestingAnswrRdo5").prop('checked', (agTestingData.data[agTestingData.curQuestion].answrNo == 5));
     $("#agTestingAnswrOpt6").text("" + (agTestingData.data[agTestingData.curQuestion].qAns6));
-    $("#agTestingAnswrRdo6").prop('checked',(agTestingData.data[agTestingData.curQuestion].answrNo == 6));
+    $("#agTestingAnswrRdo6").prop('checked', (agTestingData.data[agTestingData.curQuestion].answrNo == 6));
     // agTestingAnsrsAnsText
     $("#agTestingAnsrsAnsText").text("" + (agTestingData.data[agTestingData.curQuestion].qText));
 }
 
 function normalizeTestingData() {
     // нормализация данных в списке вопросов
-    if (! agTestingData.loaded) {
+    if (!agTestingData.loaded) {
         return;
     }
 
     var tData = agTestingData.data;
 
     //noinspection JSDuplicatedDeclaration
-    for (var i = agTestingData.data.length -1; i >= 0 ; i--){
+    for (var i = agTestingData.data.length - 1; i >= 0; i--) {
         var cQuest = agTestingData.data[i];
 
-        if (""==cQuest.qText) {
+        if ("" == cQuest.qText) {
             // надо удалить этот элемент из массива
-            agTestingData.data.splice (i,1);
+            agTestingData.data.splice(i, 1);
             //noinspection UnnecessaryContinueJS
             continue;
         }
     }
     //noinspection JSDuplicatedDeclaration
-    for (var i = agTestingData.data.length -1; i >= 0 ; i--){
-        agTestingData.data[i].noByOrder = i +1; // номер по порядку
+    agTestingData.answData = Array(agTestingData.data.length);
+    for (var i = agTestingData.data.length - 1; i >= 0; i--) {
+        agTestingData.answData[i] = Array();
+        agTestingData.data[i].noByOrder = i + 1; // номер по порядку
     }
 }
 
 function initTestingData(dt) {
-    agTestingData.data = dt;
+    agTestingData.data = dt.data;
+    agTestingData.allData = dt;
     agTestingData.loaded = true;
     agTestingData.curQuestion = 0;
 
@@ -264,7 +336,7 @@ function initTestingData(dt) {
     displayTesting();
 }
 
-function loadTestingJSON (){
+function loadTestingJSON() {
     if (agTestingData.loaded) {
         return;
     }
@@ -311,7 +383,7 @@ function setTOCTree() {
 
         if ('OK' !== data['status']) {
             console.log('Что-то пошло не так при получении строки TOC с сервера');
-            return ;
+            return;
         }
 
         tree = transformDataToTOCTree(data['data']);
@@ -328,28 +400,29 @@ function setTOCTree() {
             agTestingData['testDataLoaded'] = true;
         }
 
-        tree = [{ text: crsData ['Name']
+        tree = [{
+            text: crsData ['Name']
             //"ПТМ ДЛЯ РУКОВОДИТЕЛЕЙ, ОТВЕТСТВЕННЫХ  ЗА ПОЖАРНУЮ БЕЗОПАСНОСТЬ ОБЪЕКТОВ КУЛЬТУРЫ, ТЕАТРОВ, КИНОТЕАТРОВ, ЦИРКОВ, КЛУБОВ, БИБЛИОТЕК (Ф2)"
             ,
-            nodes : [{text:'МАТЕРИАЛЫ', nodes :tree, curHash: "" }, {text : 'ТЕСТИРОВАНИЕ', try2Test:""}]
+            nodes: [{text: 'МАТЕРИАЛЫ', nodes: tree, curHash: ""}, {text: 'ТЕСТИРОВАНИЕ', try2Test: ""}]
         }];
 
         $('#agTOCTree').treeview({
             data: tree
         });
 
-        $('#agTOCTree').on('nodeSelected', function(event, data) {
+        $('#agTOCTree').on('nodeSelected', function (event, data) {
             // Your logic goes here
             /*
-            console.log("You clicked a paragraph!");
-            console.log(event);
-            */
-            console.log(data);
+             console.log("You clicked a paragraph!");
+             console.log(event);
+             console.log(data);
+             */
 
             if ('curHash' in data) {
                 if (agTestingData['courseDataLoaded']) {
                     gDocID = agTestingData['courseData']['googleDocID'];
-                    window.open('https://docs.google.com/document/d/'+gDocID+'/pub?embedded=true#'+(data.curHash ? data.curHash : ""), 'agContentFrame','');
+                    window.open('https://docs.google.com/document/d/' + gDocID + '/pub?embedded=true#' + (data.curHash ? data.curHash : ""), 'agContentFrame', '');
                     showLearningPanel();
                 }
                 //window.open('https://docs.google.com/document/d/1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw/pub?embedded=true#'+(data.curHash ? data.curHash : ""), 'agContentFrame','');
@@ -358,13 +431,13 @@ function setTOCTree() {
 
             if ('try2Test' in data) {
                 console.log(data);
-                if (('status' in window.agTICResult) && ("OK"===window.agTICResult.status)) {
+                if (('status' in window.agTICResult) && ("OK" === window.agTICResult.status)) {
                     // все должно быть ОК
-                    console.log('RESULT === OK');
+                    // console.log('RESULT === OK');
                     showTestingPanel();
                 } else {
-                    console.log('RESULT !== OK');
-                    showLearningPanel ();
+                    // console.log('RESULT !== OK');
+                    showLearningPanel();
                 }
             }
 
@@ -373,87 +446,102 @@ function setTOCTree() {
         });
 
     }).done(function () {
-        console.log("second success");
+        //console.log("second success");
     })
         .fail(function (d, textStatus, error) {
             //console.log("error");
-            console.error("getJSON failed, status: " + textStatus + ", error: " + error)
+            //console.error("getJSON failed, status: " + textStatus + ", error: " + error)
         })
         .always(function () {
-            console.log("complete");
+            //console.log("complete");
         });
 
 
 }
 /*
-$( "div#agTOCTree li.node-agTOCTree" ).each(function( index ) {
-    //console.log( index + ": " + $( this ).text() );
-    console.log( index + ": " + $( this ).text() );
-    //$( this ).append ('<a>fff</a>');
-});
-*/
+ $( "div#agTOCTree li.node-agTOCTree" ).each(function( index ) {
+ //console.log( index + ": " + $( this ).text() );
+ console.log( index + ": " + $( this ).text() );
+ //$( this ).append ('<a>fff</a>');
+ });
+ */
 
-function randN(n){  // [ 1 ] random numbers
-    return (Math.random()+'').slice(2, 2 + Math.max(1, Math.min(n, 15)) );
+function randN(n) {  // [ 1 ] random numbers
+    return (Math.random() + '').slice(2, 2 + Math.max(1, Math.min(n, 15)));
 }
 
-function showModal (header, body, buttons){
-    var dlgID = 'agDlgConfirmLogout'+randN(100);
-    var labelledby = 'agModalLabelConfLogout'+dlgID;
+function showModal(header, body, buttons) {
+    var dlgID = 'agDlgConfirmLogout' + randN(100);
+    var labelledby = 'agModalLabelConfLogout' + dlgID;
 
     var dlgDiv = $('<div/>', {
-        id:     dlgID,
-        class:  'modal fade',
+        id: dlgID,
+        class: 'modal fade',
         tabindex: "-1",
         role: 'dialog',
-        'aria-labelledby' : labelledby
+        'aria-labelledby': labelledby
     });
 
     var dlgDivDialog = $('<div/>', {
-        class:  'modal-dialog modal-sm',
+        class: 'modal-dialog modal-sm',
         role: 'document'
     });
     dlgDiv.append(dlgDivDialog);
     var dlgDivDialogModalContent = $('<div/>', {
-        class:  'modal-content'
+        class: 'modal-content'
     });
     dlgDivDialog.append(dlgDivDialogModalContent);
     // <div class="modal-header">
     var dlgDivDialogModalContentHeader = $('<div/>', {
-        class:  'modal-header'
+        class: 'modal-header'
     });
-    var dlgDivDialogModalContentHeaderCls = $('<button/>', {type : "button", class : "close", 'data-dismiss':"modal", 'aria-label':"Закрыть"});
-    $('<i/>', {'class' : "fa fa-times", 'aria-hidden' : "true"}).appendTo(dlgDivDialogModalContentHeaderCls);
+    var dlgDivDialogModalContentHeaderCls = $('<button/>', {
+        type: "button",
+        class: "close",
+        'data-dismiss': "modal",
+        'aria-label': "Закрыть"
+    });
+    $('<i/>', {'class': "fa fa-times", 'aria-hidden': "true"}).appendTo(dlgDivDialogModalContentHeaderCls);
     dlgDivDialogModalContentHeader.append(dlgDivDialogModalContentHeaderCls);
-    $('<h4/>', {'class' : "modal-title", 'id' : labelledby, text : header }).appendTo(dlgDivDialogModalContentHeader);
+    $('<h4/>', {'class': "modal-title", 'id': labelledby, text: header}).appendTo(dlgDivDialogModalContentHeader);
 
     //modal-body
     var dlgDivDialogModalContentBody = $('<div/>', {
-        class:  'modal-body'
-        ,text: body
+        class: 'modal-body'
+        , text: body
     });
     // modal-footer
     var dlgDivDialogModalContentFooter = $('<div/>', {
-        class:  'modal-footer'
+        class: 'modal-footer'
     });
-    $('<button/>', {'class' : "btn btn-default", 'type' : "button", 'data-dismiss':"modal", text: 'Отмена'}).appendTo(dlgDivDialogModalContentFooter);
+    $('<button/>', {
+        'class': "btn btn-default",
+        'type': "button",
+        'data-dismiss': "modal",
+        text: 'Отмена'
+    }).appendTo(dlgDivDialogModalContentFooter);
     dlgDivDialogModalContent.append(dlgDivDialogModalContentHeader);
     dlgDivDialogModalContent.append(dlgDivDialogModalContentBody);
     dlgDivDialogModalContent.append(dlgDivDialogModalContentFooter);
 
-    buttons.forEach(function(item, i, arr) {
+    buttons.forEach(function (item, i, arr) {
         //alert( i + ": " + item + " (массив:" + arr + ")" );
-        $('<button/>', {'class' : "btn btn-primary", 'data-dismiss':"modal", 'type' : "button", text: item['text'],
-            on : {click : function (event){item['action']();}}
+        $('<button/>', {
+            'class': "btn btn-primary", 'data-dismiss': "modal", 'type': "button", text: item['text'],
+            on: {
+                click: function (event) {
+                    item['action']();
+                }
+            }
         }).appendTo(dlgDivDialogModalContentFooter);
     });
 
-    $( "body" ).append (dlgDiv);
+    $("body").append(dlgDiv);
     dlgDiv.modal({});
 }
 
 function handlelogout(e) {
-    data = {'action':'logout'};
+    data = {'action': 'logout'};
     $.ajax({ // инициaлизируeм ajax зaпрoс
         type: 'POST', // oтпрaвляeм в POST фoрмaтe, мoжнo GET
         url: 'index.php?action=logout', // путь дo oбрaбoтчикa, у нaс oн лeжит в тoй жe пaпкe
@@ -465,18 +553,18 @@ function handlelogout(e) {
         success: function (data) { // сoбытиe пoслe удaчнoгo oбрaщeния к сeрвeру и пoлучeния oтвeтa
             if (data['error']) { // eсли oбрaбoтчик вeрнул oшибку
                 // alert(data['error']); // пoкaжeм eё тeкст
-                console.log (data['error']);
+                console.log(data['error']);
             } else { // eсли всe прoшлo oк
                 //alert('Письмo oтврaвлeнo! Чeкaйтe пoчту! =)'); // пишeм чтo всe oк
                 rdr = data['redirect'];
                 if (rdr) {
-                    window.open(rdr, '_top','');
+                    window.open(rdr, '_top', '');
                 }
             }
         },
         error: function (xhr, ajaxOptions, thrownError) { // в случae нeудaчнoгo зaвeршeния зaпрoсa к сeрвeру
-            console.log (xhr.status);
-            console.log (thrownError);
+            console.log(xhr.status);
+            console.log(thrownError);
             alert("При получении данных с сервера возникла ошибка. Пожалуйста, нажмите ссылку 'Выход' и войдите снова.");
             //alert(xhr.status); // пoкaжeм oтвeт сeрвeрa
             //alert(thrownError); // и тeкст oшибки
@@ -495,14 +583,16 @@ $(document).ready(function () {
     showLearningPanel();
     showTestingPanel();
 
-    $('.navbar #agLogout').on( 'click', function (event) {
-        //$('#agDlgConfirmLogout').modal({});
+    $('.navbar #agLogout').on('click', function (event) {
+            //$('#agDlgConfirmLogout').modal({});
 
-        showModal('Подтвердите выход!',
-            'Вы подтверждаете выход из процесса обучения? Сессия будет завершена и вам придется проходить все заново?',
-            [{text:'ОК', action : function (){
-                handlelogout (event);
-            } }]);
+            showModal('Подтвердите выход!',
+                'Вы подтверждаете выход из процесса обучения? Несохраненные данные будут утеряны?',
+                [{
+                    text: 'ОК', action: function () {
+                        handlelogout(event);
+                    }
+                }]);
         }
     );
 
@@ -516,5 +606,5 @@ $(document).ready(function () {
 
 var agTICResult = {};
 //var agTestingJSON = {};
-var agTestingData = { loaded : false, data: []};
+var agTestingData = {loaded: false, data: [], answData: []};
 

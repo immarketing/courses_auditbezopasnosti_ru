@@ -58,6 +58,28 @@ function initJSONReply ($isError = false) {
     return (!$isError?initJSONReplyOK():initJSONReplyError());
 }
 
+function getTestingJSONForTestID ($id) {
+    $result = '';
+    $tst = readTests($id);
+    if ($tst) {
+        // прочитали данные теста из базы. Реально мне нужна только информация по ID гугл документа
+        $courseID = $tst['GoogleSheetID'];
+    }
+    if ($tst['json']) {
+        $result = $tst['json'];
+    } else {
+        $url = 'https://script.google.com/macros/s/AKfycbxCQvc631SEAgPfjIukHwyGlT89IyL8XMb3UdODclQaAWpBjA/exec?version=2&docid='.$courseID;
+        $result = file_get_contents($url);
+        $db = connectDB();
+        $prep = $db->prepare("update agtests set JSON = ? where id = ? and JSON is NULL ");
+        $prep->bind_param('si',$result, $id );
+        $prep->execute();
+        //$result = $db->query();
+        $db->close();
+    }
+    return $result;
+}
+
 function readTests ($id) {
     try {
         $db = connectDB();

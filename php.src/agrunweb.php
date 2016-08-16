@@ -34,7 +34,6 @@ function agHandleGetTestingJSON () {
                 // прочитали данные теста из базы. Реально мне нужна только информация по ID гугл документа
                 $courseID = $tst['GoogleSheetID'];
             }
-
         } else {
             // пользователь авторизован, но данные его из базы почему-то не прочитались. :(
             setJSONReplyError($res, 'User authorized, but not in DB! Relogin, please!');
@@ -49,10 +48,13 @@ function agHandleGetTestingJSON () {
         //return;
     }
 
+    $result = getTestingJSONForTestID($tst);
+
     //запрошу информацию непосредственно с сайта ГУГЛ
     // 1bjsUfCOpTP7LOOQTpsZqqKwxIbZxkQu6lD386K68TRM
-    $url = 'https://script.google.com/macros/s/AKfycbxCQvc631SEAgPfjIukHwyGlT89IyL8XMb3UdODclQaAWpBjA/exec?docid='.$courseID;
-    $result = file_get_contents($url);
+    //      https://script.google.com/macros/s/AKfycbxCQvc631SEAgPfjIukHwyGlT89IyL8XMb3UdODclQaAWpBjA/exec?docid=1wguJxZMOM9gxCl_IxXg6EetORwIEzG-qWHDbHltiiIw&version=2
+    //$url = 'https://script.google.com/macros/s/AKfycbxCQvc631SEAgPfjIukHwyGlT89IyL8XMb3UdODclQaAWpBjA/exec?version=2&docid='.$courseID;
+    //$result = file_get_contents($url);
     // Will dump a beauty json :3
 
     if ($is_console) {
@@ -73,6 +75,25 @@ function agHandleTic(){
 function agHandlePHPInfo(){
     preventWebDefault();
     phpinfo();
+}
+
+function agHandleSaveAnswers (){
+    preventWebDefault();
+    $res = initJSONReply();
+    /*
+     *                    answrJSON['_q'+(i<=9?'0':'')+i+'UID'] = agTestingData.answData[i].UID;
+                    answrJSON['_q'+(i<=9?'0':'')+i+'ansno'] = agTestingData.answData[i].answrNo;
+
+     */
+
+    if ($_POST) { // eсли пeрeдaн мaссив POST
+        //$lgn = htmlspecialchars($_POST["username"]); // пишeм дaнныe в пeрeмeнныe и экрaнируeм спeцсимвoлы
+    }
+    $tID = $_POST['testID'];
+    $tst = readTests($tID);
+
+    agAnswerJSON($res);
+    die();
 }
 
 function agHandleLogout (){

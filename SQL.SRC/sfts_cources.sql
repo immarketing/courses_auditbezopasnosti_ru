@@ -93,6 +93,7 @@ CREATE TABLE IF NOT EXISTS `agtests` (
   `Name` varchar(200) NOT NULL,
   `Code` varchar(10) NOT NULL,
   `GoogleSheetID` varchar(50) NOT NULL,
+  `JSON` longtext,
   PRIMARY KEY (`id`),
   UNIQUE KEY `agTests_Code_uindex` (`Code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -100,8 +101,8 @@ CREATE TABLE IF NOT EXISTS `agtests` (
 -- Дамп данных таблицы sfts_courses.agtests: ~1 rows (приблизительно)
 DELETE FROM `agtests`;
 /*!40000 ALTER TABLE `agtests` DISABLE KEYS */;
-INSERT INTO `agtests` (`id`, `ShortName`, `Name`, `Code`, `GoogleSheetID`) VALUES
-	(1, 'Тест ПТМ.РК.1', 'Тест ПТМ.РК.1', 'ПТМ.РК.1', '1bjsUfCOpTP7LOOQTpsZqqKwxIbZxkQu6lD386K68TRM');
+INSERT INTO `agtests` (`id`, `ShortName`, `Name`, `Code`, `GoogleSheetID`, `JSON`) VALUES
+	(1, 'Тест ПТМ.РК.1', 'Тест ПТМ.РК.1', 'ПТМ.РК.1', '1wguJxZMOM9gxCl_IxXg6EetORwIEzG-qWHDbHltiiIw', NULL);
 /*!40000 ALTER TABLE `agtests` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

@@ -21,6 +21,7 @@ define('AG_AN_PHPINFO', 'phpinfo' );
 define('AG_AN_LOGIN', 'login' );
 define('AG_AN_LOGOUT', 'logout' );
 define('AG_AN_GETTOC', 'gettoc' );
+define('AG_AN_SAVEANSWERS', 'saveanswers');
 
 
 // ^

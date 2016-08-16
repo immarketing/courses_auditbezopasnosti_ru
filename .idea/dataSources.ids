@@ -175,16 +175,19 @@ pwd1</columns>
         <mandatory>1</mandatory>
         <data-type>varchar(50)|0</data-type>
       </column>
-      <index id="45" parent="6" name="agTests_Code_uindex">
+      <column id="45" parent="6" name="JSON">
+        <data-type>longtext|0</data-type>
+      </column>
+      <index id="46" parent="6" name="agTests_Code_uindex">
         <columns>Code</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <key id="46" parent="6" name="PRIMARY">
+      <key id="47" parent="6" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
-      <key id="47" parent="6" name="agTests_Code_uindex">
+      <key id="48" parent="6" name="agTests_Code_uindex">
         <columns>Code</columns>
         <underlying-index>agTests_Code_uindex</underlying-index>
       </key>
