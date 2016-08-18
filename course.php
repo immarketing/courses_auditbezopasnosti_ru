@@ -167,6 +167,13 @@
                     </div>
 
                 </div>
+
+                <div id="agTestingResult" class="container-fluid agDisplayNone">
+                    <p>
+                        Поздравляем! Ваше тестирование завершено. Ваш результат: <span id="agTestingResultValue"></span>
+                    </p>
+
+                    </div>
                 agTesting
             </div>
             agRightCol

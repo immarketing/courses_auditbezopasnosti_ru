@@ -125,9 +125,21 @@ function sendTic() {
         });
 }
 
+function showTestingResult () {
+    if (agTestingData.isTestingCompleted ) {
+        $("div#agTestingQuest").addClass('agDisplayNone');
+        $("div#agTestingResult").removeClass('agDisplayNone');
+    } else {
+        $("div#agTestingQuest").removeClass('agDisplayNone');
+        $("div#agTestingResult").addClass('agDisplayNone');
+    }
+    $("span#agTestingResultValue").text(agTestingData.testingResult);
+}
 function showLearningPanel() {
     $("div#agLearning").removeClass('agDisplayNone');
     $("div#agTesting").addClass('agDisplayNone');
+    showTestingResult();
+
 
 }
 
@@ -135,6 +147,7 @@ function showTestingPanel() {
     loadTestingJSON();
     $("div#agTesting").removeClass('agDisplayNone');
     $("div#agLearning").addClass('agDisplayNone');
+    showTestingResult();
 }
 
 function agClickPrevBtn() {
@@ -235,6 +248,12 @@ function agClickDoneBtn() {
                             console.log(data['error']);
                         } else { // eсли всe прoшлo oк
                             console.log(data);
+                            // resultProcent
+
+                            agTestingData.isTestingCompleted    = 1;
+                            agTestingData.testingResult         = data['resultProcent'];
+
+                            showTestingResult();
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) { // в случae нeудaчнoгo зaвeршeния зaпрoсa к сeрвeру
@@ -388,6 +407,12 @@ function setTOCTree() {
 
         tree = transformDataToTOCTree(data['data']);
 
+        // agTestingData
+        if (data['isTestingCompleted']) {
+            agTestingData.isTestingCompleted    = data['isTestingCompleted'];
+            agTestingData.testingResult         = data['testingResult'];
+        }
+
         var crsData = data['courseData'];
         if (crsData) {
             agTestingData['courseData'] = crsData;
@@ -454,6 +479,7 @@ function setTOCTree() {
         })
         .always(function () {
             //console.log("complete");
+            showTestingPanel();
         });
 
 
@@ -606,5 +632,5 @@ $(document).ready(function () {
 
 var agTICResult = {};
 //var agTestingJSON = {};
-var agTestingData = {loaded: false, data: [], answData: []};
+var agTestingData = {loaded: false, data: [], answData: [], isTestingCompleted : 0, testingResult : 0};
 

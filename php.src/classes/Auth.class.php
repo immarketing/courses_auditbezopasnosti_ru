@@ -42,7 +42,7 @@ class User
     public function readFromDB() {
         try {
             $db = connectDB();
-            $query = "select id,login,pwd1,courseID, testID from agpupils where
+            $query = "select id,login,pwd1,courseID, testID, testResult, isTestCompleted from agpupils where
             id = ? limit 1";
             $sth = $db->prepare($query);
 
@@ -63,6 +63,24 @@ class User
             return false;
         }
     }
+
+    // testResult, isTestCompleted
+    public function getTestResult (){
+        if ($this->user) {
+            return $this->user['testResult'];
+        } else {
+            return false;
+        }
+    }
+
+    public function getIsTestCompleted (){
+        if ($this->user) {
+            return $this->user['isTestCompleted'];
+        } else {
+            return false;
+        }
+    }
+
     public function getCourseID (){
         if ($this->user) {
             return $this->user['courseID'];
@@ -73,6 +91,13 @@ class User
     public function getTestID (){
         if ($this->user) {
             return $this->user['testID'];
+        } else {
+            return false;
+        }
+    }
+    public function getID (){
+        if ($this->user) {
+            return $this->user['id'];
         } else {
             return false;
         }

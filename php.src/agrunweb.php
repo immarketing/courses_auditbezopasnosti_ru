@@ -92,6 +92,69 @@ function agHandleSaveAnswers (){
     $tID = $_POST['testID'];
     $tst = readTests($tID);
 
+    $tstJSON = $tst['JSON']; // в переменной хранится JSON тестирования
+    $tstData = json_decode($tstJSON);
+    $tstData = $tstData->data;
+
+    $tstDataCorrAnsw = [];
+    foreach ($tstData as $k=>$v) {
+        //
+        //$k ++;
+        if ($v->qText){
+            $tstDataCorrAnsw[$v->UID] = $v->qAnsCorr;
+        }
+    }
+
+    $answrs = [];
+    $answrsHash = [];
+    // тут необходимо сохранить результаты тестирования в базе данных
+    // пробегаемся по полученным результатам и вылавливаем ответы
+    //     [_q00UID] => b113b166-c4b0-4117-8113-69fefcd35258
+    // [_q00ansno] => 1
+    foreach ($_POST as $k=>$v) {
+        $matches = [];
+        if (preg_match('/^_q(\d+)UID$/i', $k, $matches)) {
+            //echo "Вхождение найдено.";
+            // $matches[1] - номер вопроса
+            $answrs[0+$matches[1]]['UID'] = $v;
+            //$k ++;
+        } else if (preg_match('/^_q(\d+)ansno$/i', $k, $matches)) {
+            //echo "Вхождение найдено.";
+            // $matches[1] - номер вопроса
+            $answrs[0+$matches[1]]['ANO'] = $v;
+            //$k ++;
+        }
+    }
+    foreach ($answrs as $k=>$v) {
+        $answrsHash[$v['UID']]=$v['ANO'];
+    }
+
+    $answersToStore = [
+        qCount => count ($tstDataCorrAnsw) // всего вопросов
+        , corrCount => 0 // всего правильных ответов
+        , resPercent => 0 // итоговый процент
+        , aData => $answrsHash // данные ответов в виде хеша
+        , qData => $tstDataCorrAnsw // данные вопрос в виде хеша
+    ];
+    foreach ($tstDataCorrAnsw as $k=>$v) {
+        if ($v) {
+            if ($answrsHash[$k]){
+                if ($v == $answrsHash[$k]) {
+                    $answersToStore['corrCount'] ++;
+                }
+            }
+        }
+    }
+    if ($answersToStore['qCount']) {
+        $answersToStore['resPercent'] = $answersToStore['corrCount'] / $answersToStore['qCount'] * 100;
+    }
+
+    $user = new Auth\User ();
+    $user->readFromDB();
+    setTestResultForPPLID($user->getID(), json_encode($answersToStore));
+
+    $res['resultProcent'] = $answersToStore['resPercent'];
+
     agAnswerJSON($res);
     die();
 }
@@ -122,6 +185,11 @@ function agHandleGetTOC (){
     preventWebDefault();
     $res = initJSONReply();
 
+    // {"qCount":12,"corrCount":1,"resPercent":8.3333333333333,"aData":{"b113b166-c4b0-4117-8113-69fefcd35258":"1","b346f89c-4311-4346-8299-dbf8c48b59a5":"4","91f3c142-be82-488c-9fed-16fbd89ed3c6":"2","fdb98a43-5a37-4ca5-a864-bac079d17b9e":"6","8c16e8ce-b8a8-40a6-bebc-97b207593f38":"5","c137e133-5b83-4dec-942e-2b0bf60f32b2":"3"},"qData":{"b113b166-c4b0-4117-8113-69fefcd35258":1,"b346f89c-4311-4346-8299-dbf8c48b59a5":"","91f3c142-be82-488c-9fed-16fbd89ed3c6":"","fdb98a43-5a37-4ca5-a864-bac079d17b9e":"","8c16e8ce-b8a8-40a6-bebc-97b207593f38":"","c137e133-5b83-4dec-942e-2b0bf60f32b2":"","f76ff71a-041b-4416-9b07-bd68f88d36c5":"","7cbb8c73-5e55-4113-a010-bc240141e813":"","554e8335-f536-48bf-9718-8650d6becb7a":"","fa782a5a-6126-4d09-af3c-78627f358a76":"","1f9ea0eb-d53b-47ed-9358-a5157b4a398a":"","bc031d41-7961-47de-95ca-9dd669247c25":""}}
+
+    $res['isTestingCompleted'] = 0;
+    $res['testingResult'] = 0;
+
     //$aTOCJSON = readGoogleTOC ('1dvrIuJYSj83jmhmURQCmH6DEIrIs0ivIrw0l5iPFANw');
     //$aTOCJSON = json_decode ($aTOCJSON);
     //echo ($aTOCJSON);
@@ -150,6 +218,14 @@ function agHandleGetTOC (){
                 $aTOCJSON = $crs['TOCJSON'];
                 $aTOCJSONJS = json_decode($aTOCJSON);
                 $res['data'] = $aTOCJSONJS;
+            }
+            $res['isTestingCompleted'] = $user->getIsTestCompleted();
+            $tstRslt = $user->getTestResult();
+            if ($tstRslt) {
+                $tstRsltJSON = json_decode($tstRslt);
+                $res['testingResult'] = $tstRsltJSON->resPercent;
+            } else {
+                $res['testingResult'] = 0;
             }
         }
     } else {

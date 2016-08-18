@@ -58,6 +58,14 @@ function initJSONReply ($isError = false) {
     return (!$isError?initJSONReplyOK():initJSONReplyError());
 }
 
+function setTestResultForPPLID ($id, $testResultJSONAsString) {
+    $db = connectDB();
+    $prep = $db->prepare("update sfts_courses.agpupils set isTestCompleted = 1,testResult = ? where id = ?");
+    $prep->bind_param('si',$testResultJSONAsString, $id );
+    $prep->execute();
+    //$result = $db->query();
+    $db->close();
+}
 function getTestingJSONForTestID ($id) {
     $result = '';
     $tst = readTests($id);
@@ -65,8 +73,8 @@ function getTestingJSONForTestID ($id) {
         // прочитали данные теста из базы. Реально мне нужна только информация по ID гугл документа
         $courseID = $tst['GoogleSheetID'];
     }
-    if ($tst['json']) {
-        $result = $tst['json'];
+    if ($tst['JSON']) {
+        $result = $tst['JSON'];
     } else {
         $url = 'https://script.google.com/macros/s/AKfycbxCQvc631SEAgPfjIukHwyGlT89IyL8XMb3UdODclQaAWpBjA/exec?version=2&docid='.$courseID;
         $result = file_get_contents($url);
@@ -76,6 +84,7 @@ function getTestingJSONForTestID ($id) {
         $prep->execute();
         //$result = $db->query();
         $db->close();
+        // mysqli_stmt::send_long_data ( int $param_nr , string $data )
     }
     return $result;
 }
