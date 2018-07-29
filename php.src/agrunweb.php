@@ -1,5 +1,7 @@
 <?php
 
+use ReCaptcha\ReCaptcha;
+
 require_once 'aglib.php';
 require_once 'agactions.php';
 
@@ -253,7 +255,7 @@ function agHandleLogin()
         $siteKey = '';
         $secret = '6LcnDSYTAAAAAOh4W1VSboT7cTsWKxq7hL_LD4AK';
 
-        $recaptcha = new \ReCaptcha\ReCaptcha($secret);
+        $recaptcha = new ReCaptcha($secret);
         $resp = $recaptcha->verify($gcp, $_SERVER['REMOTE_ADDR']);
 
         if ($resp->isSuccess()) {

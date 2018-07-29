@@ -43,7 +43,7 @@ if ($is_console) {
     //var_dump($options);
 } else {
     agHandleWeb();
-    $actionValue = $_REQUEST[AG_PN_ACTION]; // на самом деле, может приходить и из ГКТ и из ПОСТ
+    $actionValue = isset($_REQUEST[AG_PN_ACTION]) ? $_REQUEST[AG_PN_ACTION] : '' ; // на самом деле, может приходить и из ГКТ и из ПОСТ
 }
 
 $actions = agGetActionsList($is_console);
