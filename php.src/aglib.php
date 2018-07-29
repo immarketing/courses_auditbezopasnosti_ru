@@ -8,6 +8,7 @@
 
 function connectDB (){
     $mysqli = new mysqli("localhost", "mysqlcoursesuser", "Ed61a57pe13XA88j", "sfts_courses");
+    $mysqli-> set_charset("UTF8");
     if (!$mysqli) {
         die("Connection failed: " . $mysqli->connect_error);
     }

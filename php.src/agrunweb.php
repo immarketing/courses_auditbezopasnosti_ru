@@ -258,7 +258,7 @@ function agHandleLogin()
         $recaptcha = new ReCaptcha($secret);
         $resp = $recaptcha->verify($gcp, $_SERVER['REMOTE_ADDR']);
 
-        if ($resp->isSuccess()) {
+        if ($resp->isSuccess() ) {
             $user = new Auth\User ();
             $user->authorize($lgn, $pwd, true);
 

@@ -9,6 +9,7 @@ function readDB() {
         password : 'Ed61a57pe13XA88j',
         database : 'sfts_courses'
     });
+    //$mysqli-> set_charset("UTF8");
 
     connection.connect();
     /*
@@ -43,6 +44,7 @@ function updateTOCForGoogleDocIDInDB (gdID, TOC) {
         password : 'Ed61a57pe13XA88j',
         database : 'sfts_courses'
     });
+    //$mysqli-> set_charset("UTF8");
 
     connection.connect();
 
